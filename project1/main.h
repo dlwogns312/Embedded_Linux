@@ -8,6 +8,7 @@
 #include <sys/ipc.h>
 #include <sys/types.h>
 #include <sys/shm.h>
+
 #include <time.h>
 #include <string.h>
 
@@ -52,8 +53,8 @@ typedef struct _shm_data_output {
 
 void main_process(int shm_input, int shm_output);
 
-void counter_process(SHM_OUTPUT* shm_output,unsigned char* switchkey,int* now_mode);
-void digit_update(SHM_OUTPUT* shm_output,int digit,int* now_mode);
-void convert_base(SHM_OUTPUT* shm_output,int* now_mode);
+void counter_process(SHM_OUTPUT* output_data,unsigned char* switchkey,int* now_mode);
+void digit_update(SHM_OUTPUT* output_datat,int digit,int* now_mode);
+void convert_base(SHM_OUTPUT* output_data,int* now_mode);
 
 #endif

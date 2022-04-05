@@ -34,7 +34,7 @@ void input_process(int shm_input)
 
         //input for readkey and switchkey
         operating_readkey(readkey,shm_temp);
-        opearting_switchkey(switchkey,shm_temp);
+        operating_switchkey(switchkey,shm_temp);
         
         usleep(100000);
     }
