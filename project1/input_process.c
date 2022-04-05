@@ -15,14 +15,14 @@ void input_process(int shm_input)
     readkey=open(DEVICE_READKEY,O_RDONLY|O_NONBLOCK);
     switchkey=open(DEVICE_SWITCH,O_RDWR);
 
-    if(readkey==-1)
+    if(readkey<0)
     {
         printf("Readkey Error!\n");
         exit(1);
     }
-    if(switchkey==-1)
+    if(switchkey<0)
     {
-        printf("SwitchKey Error!s\n");
+        printf("SwitchKey Error!\n");
         exit(1);
     }
 

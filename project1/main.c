@@ -127,3 +127,92 @@ void main_process(int shm_input, int shm_output)
     shmdt((char*)output_data);
     printf("main ended!\n");
 }
+
+//counter_function
+void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey,int* now_mode)
+{
+    if(switchkey[0]==1)
+    {
+        switchkey[0]=0;
+        *now_mode=(*now_mode+1)%4;
+        if(*now_mode==0)
+            output_data->led=128;
+        else
+            output_data->led/=2;
+
+        convert_base(output_data,now_mode);
+    }
+    else if(switchkey[1]==1)
+    {
+        switchkey[1]=0;
+        digit_update(output_data,1,now_mode);
+    }
+    else if(switchkey[2]==1)
+    {
+        switchkey[2]=0;
+        digit_update(output_data,1,now_mode);
+    }
+    else if(switchkey[3]==1)
+    {
+        switchkey[3]=0;
+        digit_update(output_data,1,now_mode);
+    }
+
+    convert_base(output_data,now_mode);
+}
+
+void digit_update(SHM_OUTPUT *output_data,int digit, int* now_mode)
+{
+    int temp;
+
+    switch(*now_mode)
+    {
+        case 0:
+            temp=10;break;
+        case 1:
+            temp=8;break;
+        case 2:
+            temp=4;break;
+        case 3:
+            temp=2; break;
+    }
+
+    switch(digit)
+    {
+        case 3:
+            counter_num++;break;
+        case 2:
+            counter_num+=temp;break;
+        case 1:
+            counter_num+=temp*temp;break;
+
+    }
+
+    return;
+}
+
+void convert_base(SHM_OUTPUT* output_data, int* now_mode)
+{
+    int temp;
+
+     switch(*now_mode)
+    {
+        case 0:
+            temp=10;break;
+        case 1:
+            temp=8;break;
+        case 2:
+            temp=4;break;
+        case 3:
+            temp=2; break;
+    }
+
+    int third_digit=(counter_num%temp);
+    int second_digit=(counter_num/temp)%temp;
+    int first_digit=(counter_num/temp/temp)%temp;
+
+    temp=first_digit*100+second_digit*10+third_digit;
+    output_data->fnd_data=temp;
+
+    return;
+}
