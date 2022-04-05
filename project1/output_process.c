@@ -11,9 +11,9 @@ void output_process(int shm_output)
 
     while(!check_terminate)
     {
-        sleep(1);
+        //sleep(1);
         
-        printf("output\n");
+        //printf("output\n");
         if(data_out->check_terminate)
         {
             data_out->fnd_data=0;
@@ -60,7 +60,7 @@ void device_fnd(int fnd_data)
         printf("Device open error: %s\n",fnd_pos);
         exit(1);
     }
-    printf("%d\n",fnd_data);
+    //printf("%d\n",fnd_data);
 
     for(i=3;i>=0;i--)
     {
@@ -85,7 +85,7 @@ void device_led(unsigned char led)
     unsigned long *fpga_addr = 0;
     unsigned char *led_addr =0;
 
-    printf("%d\n",led);
+    //printf("%d\n",led);
     fd=open("/dev/mem",O_RDWR|O_SYNC);
     if(fd<0)
     {

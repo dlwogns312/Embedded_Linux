@@ -85,6 +85,7 @@ void main_process(int shm_input, int shm_output)
     output_data->check_terminate=0;
     output_data->led=128;
     output_data->real_init=1;
+    output_data->mode=now_mode;
    //output_data->fnd_data=get_cur_time();
 
     while(!check_terminate)
