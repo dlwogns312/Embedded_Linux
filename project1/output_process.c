@@ -6,6 +6,7 @@ void output_process(int shm_output)
 
     int check_terminate=0;
     int now_mode;
+    
     SHM_OUTPUT* data_out=(SHM_OUTPUT*)shmat(shm_output,(char*)NULL,0);
 
     while(!check_terminate)

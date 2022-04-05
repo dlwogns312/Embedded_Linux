@@ -8,5 +8,7 @@
 #include "main.h"
 
 void input_process(int shm_input);
+void operating_readkey(int readkey,SHM_INPUT* shm_temp;
+void operating_switchkey(int switchkey,SHM_INPUT* shm_temp);
 
 #endif
