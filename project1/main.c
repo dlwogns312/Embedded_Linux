@@ -49,12 +49,12 @@ int main(void)
         main_process(shm_input,shm_output);
     }
 
-    sleep(5);
-    
+
     //wait for child process
     wait(pid_input);
     wait(pid_output);
 
+    printf("free for shared memory\n");
     //Deallocate the shared memory
     shmctl(shm_input,IPC_RMID,NULL);
     shmctl(shm_output,IPC_RMID,NULL);
@@ -65,6 +65,9 @@ int main(void)
 
 void main_process(int shm_input, int shm_output)
 {
+
+    printf("Main_process started!\n");
+
     int check_terminate=0;
     int readkey_input,readkey_prev;
     int i;
@@ -84,6 +87,7 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
+        printf("main\n");
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
 

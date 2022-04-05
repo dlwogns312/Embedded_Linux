@@ -15,6 +15,7 @@ void input_process(int shm_input)
 
     while(!check_terminate)
     {
+        printf("input\n");
         if(shm_temp->check_terminate)
             check_terminate=1;
         

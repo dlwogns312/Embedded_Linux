@@ -63,5 +63,5 @@ void device_led(unsigned char led)
 	close(fd);
 
     usleep(1000);
-	return 0;
+	return ;
 }
