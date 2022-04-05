@@ -43,13 +43,14 @@ typedef struct _shm_data_input {
 
 typedef struct _shm_data_output {
     int fnd_data,mode;
-    unsigned char real_init;
     unsigned char led;
     int check_terminate;
 } SHM_OUTPUT;
 
 void main_process(int shm_input, int shm_output);
 
+//get board time
+int board_time();
 
 void counter_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 void digit_update(SHM_OUTPUT* output_datat,int digit);

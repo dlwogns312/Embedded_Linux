@@ -1,9 +1,27 @@
 #include "main.h"
 
-static int now_mode=1;
+static int now_mode=0;
 static int counter_mode=0;
 static int clock_mode=0;
 int counter_num=0;
+
+void update_mode(SHM_OUTPUT* output_data,int readkey_input)
+{
+    switch(now_mode)
+    {
+        case 0:break;
+        case 1:counter_mode=0;output_data->fnd_data=board_time();output_data->led=128;break;
+        case 2:break;
+        case 3:break;
+    }
+    if(readkey_input==READKEY_VOLUME_UP)
+        now_mode=(now_mode+1)%4;
+    else if(readkey_input==READKEY_VOLUME_DOWN)
+        now_mode=(now_mode+3)%4;
+
+    output_data->mode=now_mode;
+    printf("Changed to Mode %d!\n",now_mode);
+}
 
 int main(void)
 {
@@ -83,23 +101,23 @@ void main_process(int shm_input, int shm_output)
     
     //initialize the output data
     output_data->check_terminate=0;
+    output_data->fnd_data=board_time();
     output_data->led=128;
-    output_data->real_init=1;
     output_data->mode=now_mode;
    //output_data->fnd_data=get_cur_time();
 
     while(!check_terminate)
     {
-        //sleep(1);
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
-        //printf("waiting\n");
+
+        //Detect Readkey difference
         if(readkey_input!=readkey_prev)
         {
             switch(readkey_input)
             {
-                case READKEY_VOLUME_UP: break;
-                case READKEY_VOLUME_DOWN: break;
+                case READKEY_VOLUME_UP: update_mode(output_data,readkey_input);break;
+                case READKEY_VOLUME_DOWN: update_mode(output_data,readkey_input);break;
 
                 case READKEY_BACK:
                     check_terminate=1;
@@ -218,4 +236,12 @@ void convert_base(SHM_OUTPUT* output_data)
     output_data->fnd_data=temp;
 
     return;
+}
+
+int board_time()
+{
+    time_t t=time(NULL);
+    struct tm tm=*localtime(&t);
+
+    return 100*tm.tm_our + tm.tm_min;
 }
