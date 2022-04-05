@@ -9,8 +9,6 @@
 #include <sys/types.h>
 #include <sys/shm.h>
 
-#include <time.h>
-#include <string.h>
 
 //Set key for semaphore
 #define SEMA_KEY (key_t) 0x47
@@ -45,16 +43,11 @@ typedef struct _shm_data_input {
 } SHM_INPUT;
 
 typedef struct _shm_data_output {
-    int fnd_data,mode;
+    int fnd_data,mode,real_init;
     unsigned char led;
-    int real_init;
     int check_terminate;
 } SHM_OUTPUT;
 
 void main_process(int shm_input, int shm_output);
-
-void counter_process(SHM_OUTPUT* output_data,unsigned char* switchkey,int* now_mode);
-void digit_update(SHM_OUTPUT* output_datat,int digit,int* now_mode);
-void convert_base(SHM_OUTPUT* output_data,int* now_mode);
 
 #endif
