@@ -20,7 +20,7 @@
 #define KEY_OUTPUT (key_t) 0x50
 
 #define BUFF_SIZE 64
-
+#define MAX_BUTTON 9
 //Set for input
 #define KEY_PRESS 1
 #define KEY_RELEASE 0
