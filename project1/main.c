@@ -89,10 +89,10 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
-        sleep(1);
+        //sleep(1);
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
-        printf("waiting\n");
+        //printf("waiting\n");
         if(readkey_input!=readkey_prev)
         {
             switch(readkey_input)
@@ -197,8 +197,7 @@ void digit_update(SHM_OUTPUT *output_data,int digit)
 void convert_base(SHM_OUTPUT* output_data)
 {
     int temp;
-    printf("%d %d\n",counter_mode,counter_num);
-     switch(counter_mode)
+    switch(counter_mode)
     {
         case 0:
             temp=10;break;
