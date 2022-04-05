@@ -30,7 +30,6 @@ void input_process(int shm_input)
 
     while(!check_terminate)
     {
-        sleep(1);
         if(shm_temp->check_terminate)
             check_terminate=1;
 
@@ -50,7 +49,6 @@ void input_process(int shm_input)
 
 void operating_readkey(int readkey,SHM_INPUT* shm_temp)
 {
-    printf("entered readkey\n");
     struct input_event ev[64];
     int num=sizeof(struct input_event);
     int fd=read(readkey,ev,num*BUFF_SIZE);
@@ -78,8 +76,6 @@ void operating_readkey(int readkey,SHM_INPUT* shm_temp)
 
 void operating_switchkey(int switchkey, SHM_INPUT* shm_temp)
 {
-    printf("entered switchkey!\n");
-
     unsigned char temp[9];
     unsigned char prev_temp[9],result[9];
 
@@ -101,9 +97,6 @@ void operating_switchkey(int switchkey, SHM_INPUT* shm_temp)
     }
 
     memcpy(shm_temp->switchkey,result,num);
-
-    for(i=0;i<MAX_BUTTON;i++)
-        printf("%d",shm_temp->switchkey[i]);
 
     return;
 }

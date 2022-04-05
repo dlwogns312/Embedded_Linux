@@ -89,6 +89,7 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
+        sleep(1);
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
 
@@ -111,6 +112,8 @@ void main_process(int shm_input, int shm_output)
 
         usleep(1000);
 
+        for(i=0;i<9;i++)
+            printf("%d",input_data->switchkey[i]);
         //Operation separated by current mode
         switch(now_mode)
         {
@@ -133,6 +136,10 @@ void main_process(int shm_input, int shm_output)
 
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
+    
+    int i;
+    for(i=0;i<MAX_BUTTON;i++)
+        printf("%d",switchkey[i]);
 
     if(switchkey[0]==1)
     {
