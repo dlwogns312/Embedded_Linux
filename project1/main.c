@@ -92,7 +92,7 @@ void main_process(int shm_input, int shm_output)
         sleep(1);
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
-
+        printf("waiting\n");
         if(readkey_input!=readkey_prev)
         {
             switch(readkey_input)
@@ -112,8 +112,6 @@ void main_process(int shm_input, int shm_output)
 
         usleep(1000);
 
-        for(i=0;i<9;i++)
-            printf("%d",input_data->switchkey[i]);
         //Operation separated by current mode
         switch(now_mode)
         {
@@ -136,14 +134,8 @@ void main_process(int shm_input, int shm_output)
 
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
-    
-    int i;
-    for(i=0;i<MAX_BUTTON;i++)
-        printf("%d",switchkey[i]);
-
     if(switchkey[0]==1)
     {
-        printf("Decimal");
         switchkey[0]=0;
         counter_mode=(counter_mode+1)%4;
         if(counter_mode==0)
@@ -155,19 +147,16 @@ void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     }
     else if(switchkey[1]==1)
     {
-        printf("Octal");
         switchkey[1]=0;
         digit_update(output_data,1);
     }
     else if(switchkey[2]==1)
     {
-        printf("Quad");
         switchkey[2]=0;
         digit_update(output_data,2);
     }
     else if(switchkey[3]==1)
     {
-        printf("Bin");
         switchkey[3]=0;
         digit_update(output_data,3);
     }
@@ -208,7 +197,7 @@ void digit_update(SHM_OUTPUT *output_data,int digit)
 void convert_base(SHM_OUTPUT* output_data)
 {
     int temp;
-
+    printf("%d %d\n",counter_mode,counter_num);
      switch(counter_mode)
     {
         case 0:
