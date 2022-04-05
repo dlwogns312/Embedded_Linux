@@ -51,13 +51,16 @@ int main(void)
 
 
     //wait for child process
-    wait(pid_input);
-    wait(pid_output);
+    wait(NULL);
+    wait(NULL);
 
     printf("free for shared memory\n");
     //Deallocate the shared memory
+    if(pid_input&&pid_output)
+    {
     shmctl(shm_input,IPC_RMID,NULL);
     shmctl(shm_output,IPC_RMID,NULL);
+    }
 
 
     return;

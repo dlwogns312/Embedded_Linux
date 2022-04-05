@@ -10,7 +10,7 @@ void output_process(int shm_output)
 
     while(!check_terminate)
     {
-        printf("output\n");
+        //printf("output\n");
         if(data_out->check_terminate)
         {
             data_out->fnd_data=0;
