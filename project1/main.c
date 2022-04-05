@@ -130,14 +130,15 @@ void main_process(int shm_input, int shm_output)
 }
 
 //counter_function
-void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey,int* now_mode)
+void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey,int* counter_mode)
 {
+    pritnf("couter_process entered\n");
     if(switchkey[0]==1)
     {
         printf("Decimal");
         switchkey[0]=0;
-        *now_mode=(*now_mode+1)%4;
-        if(*now_mode==0)
+        *counter_mode=(*counter_mode+1)%4;
+        if(*counter_mode==0)
             output_data->led=128;
         else
             output_data->led/=2;
@@ -166,11 +167,11 @@ void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey,int* now
     convert_base(output_data,now_mode);
 }
 
-void digit_update(SHM_OUTPUT *output_data,int digit, int* now_mode)
+void digit_update(SHM_OUTPUT *output_data,int digit, int* counter_mode)
 {
     int temp;
 
-    switch(*now_mode)
+    switch(*counter_mode)
     {
         case 0:
             temp=10;break;
@@ -196,11 +197,11 @@ void digit_update(SHM_OUTPUT *output_data,int digit, int* now_mode)
     return;
 }
 
-void convert_base(SHM_OUTPUT* output_data, int* now_mode)
+void convert_base(SHM_OUTPUT* output_data, int* counter_mode)
 {
     int temp;
 
-     switch(*now_mode)
+     switch(*counter_mode)
     {
         case 0:
             temp=10;break;
