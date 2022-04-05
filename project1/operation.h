@@ -1,3 +1,6 @@
+#ifndef __OPERATION__
+#define __OPERATION__
+
 #include <time.h>
 #include <string.h>
 
@@ -7,3 +10,5 @@ void counter_process(SHM_OUTPUT* shm_output,unsigned char* switchkey,int* now_mo
 
 void digit_update( SHM_OUTPUT* shm_output,int digit,int* now_mode);
 void convert_base(SHM_OUTPUT* shm_output,int* now_mode);
+
+#endif

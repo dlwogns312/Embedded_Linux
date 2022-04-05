@@ -1,3 +1,6 @@
+#ifndef __MAIN__
+#define __MAIN__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,8 +19,8 @@
 #define BUFF_SIZE 64
 
 //Set for input
-#define KEY_DOWN 1
-#define KEY_UP 0
+#define KEY_PRESS 1
+#define KEY_RELEASE 0
 
 #define READKEY_BACK 158
 #define READKEY_VOLUME_UP 115
@@ -32,13 +35,13 @@
 #define MODE_DOWN 0x20
 #define INIT_MODE 1
 
-typedef struct _shm_input {
+typedef struct _shm_data_input {
     int readkey;
     int check_terminate;
     unsigned char switchkey[9];
 } SHM_INPUT;
 
-typedef struct _shm_output {
+typedef struct _shm_data_output {
     int fnd_data,mode;
     unsigned char led;
     int check_terminate;
@@ -46,3 +49,5 @@ typedef struct _shm_output {
 } SHM_OUTPUT;
 
 void main_process(int shm_input, int shm_output);
+
+#endif

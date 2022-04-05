@@ -22,7 +22,7 @@ void counter_process (SHM_OUTPUT* shm_output, unsigned char* switchkey,int* now_
     else if(switchkey[2]==1)
     {
         switchkey[2]=0;
-        digit_upadate(shm_output,1,now_mode);
+        digit_update(shm_output,1,now_mode);
     }
     else if(switchkey[3]==1)
     {

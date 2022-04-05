@@ -2,6 +2,7 @@
 
 void input_process(int shm_input)
 {
+    printf("Input_process Successfully loaded!\n");
     int readkey,switchkey;
     int check_terminate=0;
     int i,j;
@@ -67,5 +68,6 @@ void input_process(int shm_input)
     shmdt((char *)shm_temp);
     close(readkey);close(switchkey);
 
+    printf("Input_process Out!\n");
     return;
 }

@@ -3,7 +3,7 @@ CC=arm-none-linux-gnueabi-gcc
 .SUFFIXES: .c .h .o
 
 DEPS=main.h
-CFLAGS= #-W
+CFLAGS= -static #-W
 
 TARGET = test
 OBJDIR = build/

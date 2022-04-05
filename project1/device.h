@@ -1,3 +1,6 @@
+#ifndef __DEVICE__
+#define __DEVICE__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -23,3 +26,5 @@ void device_lcd (unsigned char data[32]);
 void device_fnd (int data);
 void device_led(unsigned char data);
 void device_dot (unsigned char data[10]);
+
+#endif

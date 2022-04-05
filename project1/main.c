@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 static int now_mode=1;
 static int counter_mode=0;
 static int clock_mode=0;
@@ -18,14 +17,14 @@ int main(void)
 
     if(shm_input==-1||shm_output==-1)
     {
-        fprintf(stdout,"Error occured at allocating shared memory!\n");
+        printf("Error occured at allocating shared memory!\n");
         exit(-1);
     }
     
     pid_input=fork();
     if(pid_input==-1)
     {
-        fprintf(stdout,"Error occured at making pid!\n");
+        printf("Error occured at making pid!\n");
         exit(-1);
     }
     
@@ -37,7 +36,7 @@ int main(void)
         pid_output=fork();
         if(pid_output==-1)
         {
-            fprintf(stdout,"Error occured at making pid!\n");
+            printf("Error occured at making pid!\n");
             exit(-1);
         }
         if(!pid_output)
@@ -50,6 +49,8 @@ int main(void)
         main_process(shm_input,shm_output);
     }
 
+    sleep(5);
+    
     //wait for child process
     wait(pid_input);
     wait(pid_output);
@@ -57,6 +58,7 @@ int main(void)
     //Deallocate the shared memory
     shmctl(shm_input,IPC_RMID,NULL);
     shmctl(shm_output,IPC_RMID,NULL);
+
 
     return;
 }

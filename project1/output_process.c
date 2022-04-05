@@ -2,6 +2,8 @@
 
 void output_process(int shm_output)
 {
+    printf("Output_process successfully Loaded!\n");
+
     int check_terminate=0;
     int now_mode;
     SHM_OUTPUT* data_out=(SHM_OUTPUT*)shmat(shm_output,(char*)NULL,0);
@@ -29,4 +31,8 @@ void output_process(int shm_output)
         usleep(100000);
     }
     shmdt((char*)data_out);
+
+    printf("Output_process out!\n");
+
+    return;
 }
