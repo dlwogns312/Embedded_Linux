@@ -50,8 +50,9 @@ typedef struct _shm_data_output {
 
 void main_process(int shm_input, int shm_output);
 
+/*
 void counter_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 void digit_update(SHM_OUTPUT* output_datat,int digit);
 void convert_base(SHM_OUTPUT* output_data);
-
+*/
 #endif

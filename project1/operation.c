@@ -5,6 +5,7 @@ void counter_process (SHM_OUTPUT* shm_output, unsigned char* switchkey,int* now_
 {
     if(switchkey[0]==1)
     {
+        printf("10");
         switchkey[0]=0;
         *now_mode=(*now_mode+1)%4;
         if(*now_mode==0)
@@ -16,16 +17,20 @@ void counter_process (SHM_OUTPUT* shm_output, unsigned char* switchkey,int* now_
     }
     else if(switchkey[1]==1)
     {
+        printf("8");
         switchkey[1]=0;
         digit_update(shm_output,1,now_mode);
     }
     else if(switchkey[2]==1)
     {
+        printf("4");
+
         switchkey[2]=0;
         digit_update(shm_output,1,now_mode);
     }
     else if(switchkey[3]==1)
     {
+        printf("2");
         switchkey[3]=0;
         digit_update(shm_output,1,now_mode);
     }

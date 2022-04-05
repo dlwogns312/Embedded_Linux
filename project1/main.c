@@ -117,7 +117,7 @@ void main_process(int shm_input, int shm_output)
             case 0:
             break;
             case 1:
-            counter_process(output_data,input_data->switchkey);
+            counter_process(output_data,input_data->switchkey,&counter_mode);
             break;
             default: break;
         }
@@ -130,9 +130,10 @@ void main_process(int shm_input, int shm_output)
 }
 
 //counter_function
+/*
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
-    printf("couter_process entered\n");
+
     if(switchkey[0]==1)
     {
         printf("Decimal");
@@ -222,3 +223,4 @@ void convert_base(SHM_OUTPUT* output_data)
 
     return;
 }
+*/
