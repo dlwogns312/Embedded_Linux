@@ -11,7 +11,9 @@ void output_process(int shm_output)
 
     while(!check_terminate)
     {
-        //printf("output\n");
+        sleep(1);
+        
+        printf("output\n");
         if(data_out->check_terminate)
         {
             data_out->fnd_data=0;
@@ -28,6 +30,7 @@ void output_process(int shm_output)
             device_fnd(data_out->fnd_data);
             device_led(data_out->led);
             break;
+
         }
 
         usleep(100000);
@@ -57,13 +60,14 @@ void device_fnd(int fnd_data)
         printf("Device open error: %s\n",fnd_pos);
         exit(1);
     }
+    printf("%d\n",fnd_data);
 
     for(i=3;i>=0;i--)
     {
         save[i]=fnd_data%10;
         fnd_data/=10;
     }
-
+   
     unsigned char for_write=write(dev,&save,4);
 
     if(for_write<0)
@@ -81,6 +85,7 @@ void device_led(unsigned char led)
     unsigned long *fpga_addr = 0;
     unsigned char *led_addr =0;
 
+    printf("%d\n",led);
     fd=open("/dev/mem",O_RDWR|O_SYNC);
     if(fd<0)
     {
@@ -97,7 +102,7 @@ void device_led(unsigned char led)
 	}
 	
 	led_addr=(unsigned char*)((void*)fpga_addr+LED_ADDR);
-    
+
 	//write led
 	*led_addr=led; 
 	
