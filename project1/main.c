@@ -117,7 +117,7 @@ void main_process(int shm_input, int shm_output)
             case 0:
             break;
             case 1:
-            counter_process(output_data,input_data->switchkey,&counter_mode);
+            counter_process(output_data,input_data->switchkey);
             break;
             default: break;
         }
@@ -130,48 +130,48 @@ void main_process(int shm_input, int shm_output)
 }
 
 //counter_function
-void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey,int* counter_mode)
+void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
     pritnf("couter_process entered\n");
     if(switchkey[0]==1)
     {
         printf("Decimal");
         switchkey[0]=0;
-        *counter_mode=(*counter_mode+1)%4;
-        if(*counter_mode==0)
+        counter_mode=(counter_mode+1)%4;
+        if(counter_mode==0)
             output_data->led=128;
         else
             output_data->led/=2;
 
-        convert_base(output_data,now_mode);
+        convert_base(output_data);
     }
     else if(switchkey[1]==1)
     {
         printf("Octal");
         switchkey[1]=0;
-        digit_update(output_data,1,now_mode);
+        digit_update(output_data,1);
     }
     else if(switchkey[2]==1)
     {
         printf("Quad");
         switchkey[2]=0;
-        digit_update(output_data,2,now_mode);
+        digit_update(output_data,2);
     }
     else if(switchkey[3]==1)
     {
         printf("Bin");
         switchkey[3]=0;
-        digit_update(output_data,3,now_mode);
+        digit_update(output_data,3);
     }
 
-    convert_base(output_data,now_mode);
+    convert_base(output_data);
 }
 
-void digit_update(SHM_OUTPUT *output_data,int digit, int* counter_mode)
+void digit_update(SHM_OUTPUT *output_data,int digit)
 {
     int temp;
 
-    switch(*counter_mode)
+    switch(counter_mode)
     {
         case 0:
             temp=10;break;
@@ -197,11 +197,11 @@ void digit_update(SHM_OUTPUT *output_data,int digit, int* counter_mode)
     return;
 }
 
-void convert_base(SHM_OUTPUT* output_data, int* counter_mode)
+void convert_base(SHM_OUTPUT* output_data)
 {
     int temp;
 
-     switch(*counter_mode)
+     switch(counter_mode)
     {
         case 0:
             temp=10;break;
