@@ -51,15 +51,17 @@ int main(void)
 
 
     //wait for child process
-    wait(pid_input);
-    wait(pid_output);
+    wait(NULL);
+    wait(NULL);
 
-    printf("free for shared memory\n");
+   
     //Deallocate the shared memory
-  
-    shmctl(shm_input,IPC_RMID,NULL);
-    shmctl(shm_output,IPC_RMID,NULL);
-
+    if(pid_input&&pid_output)
+    {
+        printf("free for shared memory\n");
+        shmctl(shm_input,IPC_RMID,NULL);
+        shmctl(shm_output,IPC_RMID,NULL);
+    }
     return;
 }
 
@@ -131,6 +133,9 @@ void main_process(int shm_input, int shm_output)
 //counter_function
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey,int* now_mode)
 {
+    int i;
+    printf("%s\n",switchkey);
+
     if(switchkey[0]==1)
     {
         switchkey[0]=0;

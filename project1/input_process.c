@@ -12,7 +12,7 @@ void input_process(int shm_input)
     SHM_INPUT *shm_temp = (SHM_INPUT*)shmat(shm_input,(char*)NULL,0);
     
     //Open readkey and switch key file using location
-    char* read_pos= "/dev/input/event0";
+    char* read_pos="/dev/input/event0";
     char* switch_pos="/dev/fpga_push_switch";
     readkey=open(read_pos,O_RDONLY|O_NONBLOCK);
     switchkey=open(switch_pos,O_RDWR);
@@ -54,7 +54,7 @@ void operating_readkey(int readkey,SHM_INPUT* shm_temp)
     int num=sizeof(struct input_event);
     int fd=read(readkey,ev,num*BUFF_SIZE);
 
-    if(fd>0&&ev[0].value==KEY_DOWN)
+    if(fd>0&&ev[0].value==KEY_PRESS)
     {
         switch(ev[0].code)
         {
