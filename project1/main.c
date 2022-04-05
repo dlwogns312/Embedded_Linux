@@ -5,12 +5,15 @@ static int counter_mode=0;
 static int clock_mode=0;
 int counter_num=0;
 
+//Array for mode name
+char* mode_print[4]={"CLOCK","COUNTER","DRAW_BOARD","TEXT_EDITOR"};
+
 void update_mode(SHM_OUTPUT* output_data,int readkey_input)
 {
     switch(now_mode)
     {
         case 0:break;
-        case 1:counter_mode=0;output_data->fnd_data=board_time();output_data->led=128;break;
+        case 1:counter_mode=0;counter_num=0;output_data->fnd_data=board_time();output_data->led=128;break;
         case 2:break;
         case 3:break;
     }
@@ -20,7 +23,7 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
         now_mode=(now_mode+3)%4;
 
     output_data->mode=now_mode;
-    printf("Changed to Mode %d!\n",now_mode);
+    printf("Changed to Mode %s!\n",mode_print[now_mode]);
 }
 
 int main(void)
@@ -243,5 +246,5 @@ int board_time()
     time_t t=time(NULL);
     struct tm tm=*localtime(&t);
 
-    return 100*tm.tm_our + tm.tm_min;
+    return 100*tm.tm_hour + tm.tm_min;
 }

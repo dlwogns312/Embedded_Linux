@@ -25,10 +25,18 @@ void output_process(int shm_output)
 
         switch(now_mode)
         {
-            case 0:break;
+            case 0:
+            device_fnd(data_out->fnd_data);
+            device_led(data_out->led);
+            break;
             case 1:
             device_fnd(data_out->fnd_data);
             device_led(data_out->led);
+            case 2:
+            device_fnd(data_out->fnd_data);
+            device_led(data_out->led);
+            case 3:
+            device_fnd(data_out->fnd_data);
             break;
 
         }
