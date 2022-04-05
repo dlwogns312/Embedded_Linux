@@ -117,7 +117,7 @@ void main_process(int shm_input, int shm_output)
             case 0:
             break;
             case 1:
-            counter_process(output_data,input_data->switchkey,&counter_mode);
+            counter_process(output_data,input_data->switchkey);
             break;
             default: break;
         }
@@ -130,7 +130,7 @@ void main_process(int shm_input, int shm_output)
 }
 
 //counter_function
-/*
+
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
 
@@ -223,4 +223,3 @@ void convert_base(SHM_OUTPUT* output_data)
 
     return;
 }
-*/

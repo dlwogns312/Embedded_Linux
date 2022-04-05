@@ -30,6 +30,7 @@ void input_process(int shm_input)
 
     while(!check_terminate)
     {
+        sleep(1);
         if(shm_temp->check_terminate)
             check_terminate=1;
 
@@ -97,6 +98,8 @@ void operating_switchkey(int switchkey, SHM_INPUT* shm_temp)
     }
 
     memcpy(shm_temp->switchkey,result,num);
+    for(i=0;i<9;i++)
+        printf("%d",shm_temp->switchkey[i]);
 
     return;
 }
