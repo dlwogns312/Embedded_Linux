@@ -56,11 +56,10 @@ int main(void)
 
     printf("free for shared memory\n");
     //Deallocate the shared memory
-    if(pid_input&&pid_output)
-    {
+  
     shmctl(shm_input,IPC_RMID,NULL);
     shmctl(shm_output,IPC_RMID,NULL);
-    }
+
 
 
     return;
@@ -90,7 +89,7 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
-        printf("main\n");
+        //printf("main\n");
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
 
@@ -124,4 +123,7 @@ void main_process(int shm_input, int shm_output)
             default: break;
         }
     }
+
+    shmdt((char*)input_data);
+    shmdt((char*)output_data);
 }
