@@ -132,7 +132,7 @@ void main_process(int shm_input, int shm_output)
 //counter_function
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
-    pritnf("couter_process entered\n");
+    printf("couter_process entered\n");
     if(switchkey[0]==1)
     {
         printf("Decimal");
