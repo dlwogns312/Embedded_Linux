@@ -29,9 +29,6 @@
 #define READKEY_VOLUME_UP 115
 #define READKEY_VOLUME_DOWN 114
 
-//Define for input device
-#define DEVICE_SWITCH "/dev/fpga_push_switch"
-#define DEVICE_READKEY "/dev/input/event0"
 
 //Define for mode
 #define MODE_UP 0x10
