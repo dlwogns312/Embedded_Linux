@@ -68,7 +68,6 @@ void device_fnd(int fnd_data)
         printf("Device open error: %s\n",fnd_pos);
         exit(1);
     }
-    //printf("%d\n",fnd_data);
 
     for(i=3;i>=0;i--)
     {
