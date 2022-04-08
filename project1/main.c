@@ -4,25 +4,27 @@ static int now_mode=0;
 static int counter_mode=0;
 static int clock_mode=0;
 int counter_num=0;
-static int add_for_clock=0;
+static int add_for_clock=0,clock_temp=0;
+static int prev_clock,which_switch;
+static int clock_flag=0;
 
 //Array for mode name
 char* mode_print[4]={"CLOCK","COUNTER","DRAW_BOARD","TEXT_EDITOR"};
 
 void update_mode(SHM_OUTPUT* output_data,int readkey_input)
 {
-    switch(now_mode)
-    {
-        case 0:clock_mode=0;add_for_clock=0;output_data->fnd_data=board_time();break;
-        case 1:counter_mode=0;counter_num=0;output_data->fnd_data=board_time();output_data->led=128;break;
-        case 2:break;
-        case 3:break;
-    }
+    
     if(readkey_input==READKEY_VOLUME_UP)
         now_mode=(now_mode+1)%4;
     else if(readkey_input==READKEY_VOLUME_DOWN)
         now_mode=(now_mode+3)%4;
-
+    switch(now_mode)
+    {
+        case 0:prev_clock=board_clock();clock_mode=0;clock_flag=0;clock_temp=0;add_for_clock=0;output_data->fnd_data=board_time();break;
+        case 1:counter_mode=0;which_switch=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
+        case 2:break;
+        case 3:break;
+    }
     output_data->mode=now_mode;
     printf("Changed to Mode %s!\n",mode_print[now_mode]);
 }
@@ -156,8 +158,53 @@ void main_process(int shm_input, int shm_output)
 //clock_function
 void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
-
+    if(switchkey[0]==1)
+    {
+        switchkey[0]=0;
+        clock_flag=1-clock_flag;
+        if(clock_flag)
+            prev_clock=board_time();
+        else
+        {
+            add_for_clock=clock_temp;
+            clock_temp=0;
+        }
+    }
+    else if(switchkey[1]==1)
+    {
+        switchkey[1]=0;
+        clock_temp=0;add_for_clock=0;
+    }
+    else if(switchkey[2]==1&&clock_flag)
+    {
+        switchkey[2]=0;
+        clock_temp+=60;
+    }
+    else if(switchkey[3]==1&&clock_flag)
+    {
+        switchkey[3]=0;
+        clock_temp+=1;
+    }
+    
+    if(clock_flag)
+    {
+        if(board_time()-prev_clock>=1)
+        {
+            which_switch=1-which_switch;
+            prev_clock=board_time();
+        }
+        if(which_switch)
+            output_data->led=16;
+        else
+            output_data->led=32;
+    }
+    else
+    {
+        output_data->led=128;
+    }
+    output_data->fnd_data=board_time()+add_for_clock;
 }
+
 
 //counter_function
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
