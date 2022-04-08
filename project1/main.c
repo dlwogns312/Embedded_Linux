@@ -14,7 +14,7 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
     switch(now_mode)
     {
         case 0:clock_mode=0;add_for_clock=0;output_data->fnd_data=board_time();break;
-        case 1:counter_mode=1;counter_num=0;output_data->fnd_data=board_time();output_data->led=128;break;
+        case 1:counter_mode=0;counter_num=0;output_data->fnd_data=board_time();output_data->led=128;break;
         case 2:break;
         case 3:break;
     }
@@ -141,7 +141,6 @@ void main_process(int shm_input, int shm_output)
             case 0:
             break;
             case 1:
-            output_data->led=64;
             counter_process(output_data,input_data->switchkey);
             break;
             default: break;
@@ -171,7 +170,13 @@ void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
             output_data->led=128;
         else
             output_data->led/=2;
-
+        switch(counter_mode)
+        {
+            case 0 :output_data->led=64;break;
+            case 1: output_data->led=32;break;
+            case 2: output_data->led=16;break;
+            case 3: output_data->led=128;break;
+        }
         convert_base(output_data);
     }
     else if(switchkey[1]==1)
@@ -200,13 +205,13 @@ void digit_update(SHM_OUTPUT *output_data,int digit)
     switch(counter_mode)
     {
         case 0:
-            temp=2;break;
-        case 1:
             temp=10;break;
-        case 2:
+        case 1:
             temp=8;break;
+        case 2:
+            temp=4;break;
         case 3:
-            temp=4; break;
+            temp=2; break;
     }
 
     switch(digit)
@@ -229,13 +234,13 @@ void convert_base(SHM_OUTPUT* output_data)
     switch(counter_mode)
     {
         case 0:
-            temp=2;break;
-        case 1:
             temp=10;break;
-        case 2:
+        case 1:
             temp=8;break;
+        case 2:
+            temp=4;break;
         case 3:
-            temp=4; break;
+            temp=2; break;
     }
 
     int third_digit=(counter_num%temp);
