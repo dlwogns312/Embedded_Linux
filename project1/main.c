@@ -4,6 +4,7 @@ static int now_mode=0;
 static int counter_mode=0;
 static int clock_mode=0;
 int counter_num=0;
+static int add_for_clock=0;
 
 //Array for mode name
 char* mode_print[4]={"CLOCK","COUNTER","DRAW_BOARD","TEXT_EDITOR"};
@@ -12,7 +13,7 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
 {
     switch(now_mode)
     {
-        case 0:break;
+        case 0:clock_mode=0;add_for_clock=0;output_data->fnd_data=board_time();break;
         case 1:counter_mode=0;counter_num=0;output_data->fnd_data=board_time();output_data->led=128;break;
         case 2:break;
         case 3:break;
@@ -152,15 +153,20 @@ void main_process(int shm_input, int shm_output)
     printf("main ended!\n");
 }
 
-//counter_function
+//clock_function
+void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
+{
 
+}
+
+//counter_function
 void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
     if(switchkey[0]==1)
     {
         switchkey[0]=0;
         counter_mode=(counter_mode+1)%4;
-        if(counter_mode==0)
+        if(counter_mode==3)
             output_data->led=128;
         else
             output_data->led/=2;
