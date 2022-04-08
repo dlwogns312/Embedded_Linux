@@ -141,6 +141,7 @@ void main_process(int shm_input, int shm_output)
         switch(now_mode)
         {
             case 0:
+            clock_process(output_data,input_data->switchkey);
             break;
             case 1:
             counter_process(output_data,input_data->switchkey);
@@ -214,8 +215,8 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     {
         output_data->led=128;
     }
-    int print_time=board_time()+add_for_clock;
-    output_data->fnd_data=print_time;
+
+    output_data->fnd_data=board_time()+add_for_clock;
 }
 
 
