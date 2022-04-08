@@ -215,8 +215,15 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     {
         output_data->led=128;
     }
-
-    output_data->fnd_data=board_time()+add_for_clock;
+    int print_clock;
+    print_clock=board_time()+add_for_clock;
+    if(print_clock%100>=60)
+    {
+        print_clock+=100;
+        print_clock-=print_clock%100;
+    }
+    print_clock=(print_clock)%2400;
+    output_data->fnd_data=print_clock;
 }
 
 
