@@ -113,10 +113,10 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
-        sleep(1);
+
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
-        printf("%d\n",now_mode);
+       
         //Detect Readkey difference
         if(readkey_input!=readkey_prev)
         {
@@ -134,7 +134,7 @@ void main_process(int shm_input, int shm_output)
                 
             }
         }
-        printf("now_time: %d add_time: %d\n",board_time(),add_for_clock);
+       
         usleep(1000);
 
         //Operation separated by current mode
@@ -167,6 +167,11 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
         else
         {
             add_for_clock+=clock_temp;
+            if(add_for_clock%100>=60)
+            {
+                add_for_clock+=100;
+                add_for_clock-=add_for_clock%100;
+            }
             clock_temp=0;
         }
     }
@@ -178,12 +183,14 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     else if(switchkey[2]==1&&clock_mode)
     {
         switchkey[2]=0;
-        clock_temp+=60;
+        clock_temp+=100;
     }
     else if(switchkey[3]==1&&clock_mode)
     {
         switchkey[3]=0;
         clock_temp+=1;
+        if(clock_temp%100==60)
+            clock_temp+=40;
     }
     
     if(clock_mode)
@@ -213,10 +220,6 @@ void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     {
         switchkey[0]=0;
         counter_mode=(counter_mode+1)%4;
-        if(counter_mode==0)
-            output_data->led=128;
-        else
-            output_data->led/=2;
         switch(counter_mode)
         {
             case 0 :output_data->led=64;break;
