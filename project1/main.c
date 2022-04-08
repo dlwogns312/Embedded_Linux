@@ -21,8 +21,8 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
     {
         case 0:prev_clock=board_time();clock_mode=0;clock_temp=0;add_for_clock=0;output_data->led=128;output_data->fnd_data=board_time();break;
         case 1:counter_mode=0;which_switch=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
-        case 2:break;
-        case 3:break;
+        case 2:output_data->fnd_data=128;break;
+        case 3:output_data->fnd_data=128;break;
     }
     output_data->mode=now_mode;
     printf("Changed to Mode %s!\n",mode_print[now_mode]);
@@ -113,9 +113,10 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
+        sleep(1);
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
-
+        printf("%d\n",now_mode);
         //Detect Readkey difference
         if(readkey_input!=readkey_prev)
         {
@@ -133,7 +134,7 @@ void main_process(int shm_input, int shm_output)
                 
             }
         }
-
+        printf("now_time: %d add_time: %d\n",board_time(),add_for_clock);
         usleep(1000);
 
         //Operation separated by current mode
