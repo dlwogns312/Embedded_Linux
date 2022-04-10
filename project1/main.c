@@ -366,7 +366,7 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
 
     input_check=0;
 
-    if(switchkey[1]&&switchkey[2])
+    if(switchkey[1]==1&&switchkey[2]==1)
     {
         //initialize switchkey and reset the text_editor mode
         text_mode=0;same_cnt=0;
@@ -379,12 +379,12 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         output_data->fnd_data=(output_data->fnd_data+1)%10000;
         return;
     }
-    else if(switchkey[4]&&switchkey[5])
+    else if(switchkey[4]==1&&switchkey[5]==1)
     {
         text_mode=1-text_mode;
         switchkey[4]=0;switchkey[5]=0;
 
-        if(!text_mode)
+        if(text_mode==0)
         {
             printf("Change into Alphabet mode!\n");
             memcpy(output_data->display_dot,fpga_number[10],10);
@@ -400,7 +400,7 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         return;
     }
 
-    else if(switchkey[7]&&switchkey[8])
+    else if(switchkey[7]==1&&switchkey[8]==1)
     {
         switchkey[7]=0;switchkey[8]=0;
         same_cnt=0;
@@ -417,20 +417,20 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
 
     for(i=0;i<9;i++)
     {
-        if(switchkey[i])
+        if(switchkey[i]==1)
         {
             prev_input=text_input;
             text_input=i+1;switchkey[i]=0;
             input_check=1;
             output_data->fnd_data=(output_data->fnd_data+1)%10000;
-
             break;
         }
     }
 
-    if(input_check)
+    if(input_check==1)
     {
-        if(!text_mode)
+        printf("Inputmod\n");
+        if(text_mode==0)
         {
             if(text_input==prev_input)
             {
@@ -443,7 +443,6 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
                 for(i=1;i<32;i++)
                     output_data->text_data[i-1]=output_data->text_data[i];
                 output_data->text_data[31]=text_board[i][same_cnt];
-                
             }
         }
         else if(text_mode==1)
