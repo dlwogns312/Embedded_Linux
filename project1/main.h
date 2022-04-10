@@ -66,4 +66,7 @@ void convert_base(SHM_OUTPUT* output_data);
 //Mode 3 - Text editor
 void text_editor_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 
+//Mode 4 - Draw Board
+void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
+
 #endif

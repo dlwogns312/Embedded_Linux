@@ -2,7 +2,6 @@
 
 static int now_mode=0;
 
-
 //value for counter
 int counter_num=0;
 static int counter_mode=0;
@@ -34,6 +33,14 @@ unsigned char fpga_number[11][10] = {
     {0x1c,0x36,0x63,0x63,0x63,0x7f,0x7f,0x63,0x63,0x63}  // A
 };
 
+
+//value for draw board
+static int cursor_mode=0;
+static int board_cnt,display_mode;
+unsigned char dot_info[10];
+static int blink,now_i,now_j;
+#define max_dot (1<<7)-1
+
 //Array for mode name
 char* mode_print[]={"CLOCK","COUNTER","TEXT_EDITOR","DRAW_BOARD"};
 
@@ -53,7 +60,7 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
         case 0:clock_mode=0;clock_temp=0;add_for_clock=0;which_switch=0;output_data->led=128;output_data->fnd_data=board_time();break;
         case 1:counter_mode=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
         case 2:output_data->led=0;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;memcpy(output_data->display_dot,fpga_number[10],10);break;
-        case 3:output_data->led=0;break;
+        case 3:blink=0;now_i=0;now_j=6;output_data->led=0;display_mode=0;output_data->fnd_data=0;memset(dot_info,0,10);break;
     }
     output_data->mode=now_mode;
     printf("Changed to Mode %s!\n",mode_print[now_mode]);
@@ -179,6 +186,9 @@ void main_process(int shm_input, int shm_output)
             counter_process(output_data,input_data->switchkey);
             case 2:
             text_editor_process(output_data,input_data->switchkey);
+            break;
+            case 3:
+            draw_board_process(output_data,input_data->switchkey);
             break;
             default: break;
         }
@@ -371,7 +381,7 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
     if(switchkey[1]==1&&switchkey[2]==1)
     {
         //initialize switchkey and reset the text_editor mode
-        text_mode=0;same_cnt=0;
+        same_cnt=0;
         switchkey[1]=0;
         switchkey[2]=0;
 
@@ -455,4 +465,86 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
             
         }
     }
+}
+
+//draw board function
+void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
+{
+    int select=0;
+    int ret;
+
+    blink=(blink+1)%2000;
+    if(switchkey[0]==1)
+    {
+        switchkey[0]=0;
+        memset(dot_info,0,10);
+        board_cnt=0;
+        now_i=0;now_j=6; display_mode=0;blink=0;cursor_mode=0;
+    }
+    else if(switchkey[1]==1)
+    {
+        board_cnt++;
+        now_i--;
+        if(now_i<0)
+            now_i=9;
+    }
+    else if(switchkey[2]==1)
+    {
+        cursor_mode=1-cursor_mode;
+        blink=0;
+        board_cnt++;
+    }
+    else if(switchkey[3]==1)
+    {
+        board_cnt++;
+        now_j++;
+        if(now_j>6)
+            now_j=0;
+    }
+    else if(switchkey[4]==1)
+    {
+        select=1;
+        board_cnt++;
+    }
+    else if(switchkey[5]==1)
+    {
+        now_j--;
+        if(now_j<0)
+            now_j=6;
+        board_cnt++;
+    }
+    else if(switchkey[6]==1)
+    {
+        memset(dot_info,0,10);
+        board_cnt++;
+    }
+    else if(switchkey[7]==1)
+    {
+        now_i++;
+        if(now_i>9)
+            now_i=0;
+        board_cnt++;
+    }
+    else if(switchkey[8]==1)
+    {
+        board_cnt++;
+        display_mode=1-display_mode;
+    }
+
+    if(select)
+        dot_info[now_i]|=(1<<now_j);
+
+    memcpy(output_data->display_dot,dot_info,10);
+
+    output_data->display_dot[now_i]|=(1<<now_j);
+
+    if(blink/1000||cursor_mode)
+        output_data->display_dot[now_i]-=(1<<now_j);
+
+    int i;
+    if(display_mode)
+    {
+        for(i=0;i<10;i++)
+            output_data->display_dot[i]^=max_dot;
+    }  
 }
