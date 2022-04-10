@@ -46,12 +46,14 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
         now_mode=(now_mode+3)%4;
     
     //Initiallize all the values used in each mode
+    memset(output_data->display_dot,0,10);
+    memset(output_data->text_data,0,32);
     switch(now_mode)
     {
         case 0:clock_mode=0;clock_temp=0;add_for_clock=0;which_switch=0;output_data->led=128;output_data->fnd_data=board_time();break;
         case 1:counter_mode=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
         case 2:output_data->led=0;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;break;
-        case 3:output_data->led=128;break;
+        case 3:output_data->led=0;break;
     }
     output_data->mode=now_mode;
     printf("Changed to Mode %s!\n",mode_print[now_mode]);
@@ -361,7 +363,7 @@ int board_time()
 //Text editor function
 void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
 {
-    int i,input_check;
+    int i,j,input_check;
     int prev_input;
 
     input_check=0;
@@ -406,8 +408,8 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         same_cnt=0;
         text_input=0;
 
-        for(i=1;i<32;i++)
-            output_data->text_data[i-1]=output_data->text_data[i];
+        for(j=1;j<32;i++)
+            output_data->text_data[j-1]=output_data->text_data[j];
         output_data->text_data[31]=' ';
         
         output_data->fnd_data=(output_data->fnd_data+1)%10000;
@@ -429,7 +431,6 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
 
     if(input_check==1)
     {
-        printf("Inputmod\n");
         if(text_mode==0)
         {
             if(text_input==prev_input)
@@ -440,16 +441,16 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
             else if(prev_input!=text_input)
             {
                 same_cnt=0;
-                for(i=1;i<32;i++)
-                    output_data->text_data[i-1]=output_data->text_data[i];
+                for(j=1;j<32;j++)
+                    output_data->text_data[j-1]=output_data->text_data[j];
                 output_data->text_data[31]=text_board[i][same_cnt];
             }
         }
         else if(text_mode==1)
         {
             same_cnt=0;
-            for(i=1;i<32;i++)
-                output_data->text_data[i-1]=output_data->text_data[i];
+            for(j=1;j<32;i++)
+                output_data->text_data[j-1]=output_data->text_data[j];
             output_data->text_data[31]=(i+1)+48;
             
         }

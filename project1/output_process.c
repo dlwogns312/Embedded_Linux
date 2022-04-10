@@ -23,26 +23,11 @@ void output_process(int shm_output)
 
         now_mode=data_out->mode;
 
-        switch(now_mode)
-        {
-            case 0:
-            device_fnd(data_out->fnd_data);
-            device_led(data_out->led);
-            break;
-            case 1:
-            device_fnd(data_out->fnd_data);
-            device_led(data_out->led);
-            break;
-            case 2:
-            device_fnd(data_out->fnd_data);
-            device_lcd(data_out->text_data);
-            device_dot(data_out->display_dot);
-            break;
-            case 3:
-            device_fnd(data_out->fnd_data);
-            break;
-
-        }
+        
+        device_fnd(data_out->fnd_data);
+        device_led(data_out->led);
+        device_lcd(data_out->text_data);
+        device_dot(data_out->display_dot);
 
         usleep(100000);
     }
