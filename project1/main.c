@@ -52,7 +52,7 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
     {
         case 0:clock_mode=0;clock_temp=0;add_for_clock=0;which_switch=0;output_data->led=128;output_data->fnd_data=board_time();break;
         case 1:counter_mode=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
-        case 2:output_data->led=0;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;break;
+        case 2:output_data->led=0;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;memcpy(output_data->display_dot,fpga_number[10],10);break;
         case 3:output_data->led=0;break;
     }
     output_data->mode=now_mode;
@@ -408,7 +408,7 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         same_cnt=0;
         text_input=0;
 
-        for(j=1;j<32;i++)
+        for(j=1;j<32;j++)
             output_data->text_data[j-1]=output_data->text_data[j];
         output_data->text_data[31]=' ';
         
@@ -449,9 +449,9 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         else if(text_mode==1)
         {
             same_cnt=0;
-            for(j=1;j<32;i++)
+            for(j=1;j<32;j++)
                 output_data->text_data[j-1]=output_data->text_data[j];
-            output_data->text_data[31]=(i+1)+48;
+            output_data->text_data[31]=(i+1)+'0';
             
         }
     }
