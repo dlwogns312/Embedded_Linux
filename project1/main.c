@@ -174,7 +174,7 @@ void main_process(int shm_input, int shm_output)
             }
         }
        
-        usleep(1000);
+        usleep(100000);
 
         //Operation separated by current mode
         switch(now_mode)
@@ -245,11 +245,11 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     if(clock_mode)
     {
         which_switch++;
-        if(which_switch>=2000)
+        if(which_switch>=20)
         {
             which_switch=0;
         }
-        if(which_switch/1000)
+        if(which_switch/10)
             output_data->led=16;
         else
             output_data->led=32;
@@ -473,7 +473,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     int select=0;
     int ret;
 
-    blink=(blink+1)%2000;
+    blink=(blink+1)%10;
     if(switchkey[0]==1)
     {
         switchkey[0]=0;
@@ -538,7 +538,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
 
     output_data->display_dot[now_i]|=(1<<now_j);
 
-    if(blink/1000||cursor_mode)
+    if(blink/10||cursor_mode)
         output_data->display_dot[now_i]-=(1<<now_j);
 
     int i;
@@ -546,5 +546,6 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     {
         for(i=0;i<10;i++)
             output_data->display_dot[i]^=max_dot;
-    }  
+    }
+    output_data->fnd_data=board_cnt;  
 }
