@@ -473,7 +473,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     int select=0;
     int ret;
 
-    blink=(blink+1)%10;
+    blink=(blink+1)%20;
     if(switchkey[0]==1)
     {
         switchkey[0]=0;
@@ -483,6 +483,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     }
     else if(switchkey[1]==1)
     {
+        switchkey[1]=0;
         board_cnt++;
         now_i--;
         if(now_i<0)
@@ -490,12 +491,14 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     }
     else if(switchkey[2]==1)
     {
+        switchkey[2]=0;
         cursor_mode=1-cursor_mode;
         blink=0;
         board_cnt++;
     }
     else if(switchkey[3]==1)
     {
+        switchkey[3]=0;
         board_cnt++;
         now_j++;
         if(now_j>6)
@@ -503,11 +506,13 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     }
     else if(switchkey[4]==1)
     {
+        switchkey[4]=0;
         select=1;
         board_cnt++;
     }
     else if(switchkey[5]==1)
     {
+        switchkey[5]=0;
         now_j--;
         if(now_j<0)
             now_j=6;
@@ -515,11 +520,13 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     }
     else if(switchkey[6]==1)
     {
+        switchkey[6]=0;
         memset(dot_info,0,10);
         board_cnt++;
     }
     else if(switchkey[7]==1)
     {
+        switchkey[7]=0;
         now_i++;
         if(now_i>9)
             now_i=0;
@@ -527,6 +534,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     }
     else if(switchkey[8]==1)
     {
+        switchkey[8]=0;
         board_cnt++;
         display_mode=1-display_mode;
     }
