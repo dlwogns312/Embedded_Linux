@@ -43,7 +43,9 @@ typedef struct _shm_data_input {
 
 typedef struct _shm_data_output {
     int fnd_data,mode;
+    unsigned char display_dot[10];
     unsigned char led;
+    char text_data[32];
     int check_terminate;
 } SHM_OUTPUT;
 
@@ -60,5 +62,8 @@ void clock_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 void counter_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 void digit_update(SHM_OUTPUT* output_datat,int digit);
 void convert_base(SHM_OUTPUT* output_data);
+
+//Mode 3 - Text editor
+void test_editor_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 
 #endif

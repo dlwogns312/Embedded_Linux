@@ -1,14 +1,30 @@
 #include "main.h"
 
 static int now_mode=0;
-static int counter_mode=0;
-static int clock_mode=0;
+
+
+//value for counter
 int counter_num=0;
+static int counter_mode=0;
+
+//value for clock
+static int clock_mode=0;
 static int add_for_clock=0,clock_temp=0;
-static int prev_clock,which_switch;
+static int which_switch;
+
+//value for text editor
+static int text_cnt,text_input,same_cnt;
+static int text_mode;
+char* text_board[9]={
+    ".QZ","ABC","DEF",
+    "GHI","JKL","MNO",
+    "PRS","TUV","WXY"
+};
+unsigned char display_alphabet[10]={ 0x1c,0x36,0x63,0x63,0x63,0x7f,0x7f,0x63,0x63,0x63};
+unsigned char display_number[10]={0x0c,0x1c,0x1c,0x0c,0x0c,0x0c,0x0c,0x0c,0x0c,0x1e};
 
 //Array for mode name
-char* mode_print[4]={"CLOCK","COUNTER","DRAW_BOARD","TEXT_EDITOR"};
+char* mode_print[]={"CLOCK","COUNTER","DRAW_BOARD","TEXT_EDITOR"};
 
 void update_mode(SHM_OUTPUT* output_data,int readkey_input)
 {
@@ -17,11 +33,13 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
         now_mode=(now_mode+1)%4;
     else if(readkey_input==READKEY_VOLUME_DOWN)
         now_mode=(now_mode+3)%4;
+    
+    //Initiallize all the values used in each mode
     switch(now_mode)
     {
-        case 0:prev_clock=board_time();clock_mode=0;clock_temp=0;add_for_clock=0;output_data->led=128;output_data->fnd_data=board_time();break;
-        case 1:counter_mode=0;which_switch=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
-        case 2:output_data->led=128;break;
+        case 0:clock_mode=0;clock_temp=0;add_for_clock=0;which_switch=0;output_data->led=128;output_data->fnd_data=board_time();break;
+        case 1:counter_mode=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
+        case 2:output_data->led=128;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;text_cnt=0;break;
         case 3:output_data->led=128;break;
     }
     output_data->mode=now_mode;
@@ -109,6 +127,7 @@ void main_process(int shm_input, int shm_output)
     output_data->fnd_data=board_time();
     output_data->led=128;
     output_data->mode=now_mode;
+    memset(output_data->text_data,' ',32);
    //output_data->fnd_data=get_cur_time();
 
     while(!check_terminate)
@@ -145,6 +164,8 @@ void main_process(int shm_input, int shm_output)
             break;
             case 1:
             counter_process(output_data,input_data->switchkey);
+            case 2:
+            text_editor_process(output_data,input_data->switchkey);
             break;
             default: break;
         }
@@ -165,7 +186,6 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
         clock_mode=1-clock_mode;
         if(clock_mode)
         {
-            prev_clock=board_time();
             which_switch=0;
             printf("Editing Clock!\n");
         }
@@ -201,12 +221,12 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     
     if(clock_mode)
     {
-        if(board_time()-prev_clock>=1)
+        which_switch++;
+        if(which_switch>=2000)
         {
-            which_switch=1-which_switch;
-            prev_clock=board_time();
+            which_switch=0;
         }
-        if(which_switch)
+        if(which_switch/1000)
             output_data->led=16;
         else
             output_data->led=32;
@@ -215,6 +235,8 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     {
         output_data->led=128;
     }
+
+    //Adjust hour max into 24 and min max into 60
     int print_clock;
     print_clock=board_time()+add_for_clock;
     if(print_clock%100>=60)
@@ -323,4 +345,111 @@ int board_time()
     struct tm tm=*localtime(&t);
 
     return 100*tm.tm_hour + tm.tm_min;
+}
+
+//Text editor function
+void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
+{
+    int i,input_check;
+    int prev_input;
+
+    input_check=0;
+
+    if(switchkey[1]&&switchkey[2])
+    {
+        //initialize switchkey and reset the text_editor mode
+        text_mode=0;same_cnt=0;
+        switchkey[1]=0;
+        switchkey[2]=0;
+
+        memset(output_data->text_data,' ',32);
+        text_cnt=0;text_input=0;
+
+        output_data->fnd_data=(output_data->fnd_data+1)%10000;
+        return;
+    }
+    else if(switchkey[4]&&switchkey[5])
+    {
+        text_mode=1-text_mode;
+        switchkey[4]=0;switchkey[5]=0;
+
+        if(!text_mode)
+            memcpy(output_data->display_dot,display_alphabet,10);
+        else
+            memcpy(output_data->display_dot,display_number,10);
+        text_input=0;
+        output_data->fnd_data=(output_data->fnd_data+1)%10000;
+
+        return;
+    }
+
+    else if(switchkey[7]&&switchkey[8])
+    {
+        switchkey[7]=0;switchkey[8]=0;
+        same_cnt=0;
+        text_input=0;
+
+        if(text_cnt<32)
+            output_data->text_data[text_cnt++]=' ';
+        else if(text_cnt==32)
+        {
+            for(i=1;i<32;i++)
+                output_data->text_data[i-1]=output_data->text_data[i];
+            output_data->text_data[text_cnt-1]=' ';
+        }
+        output_data->fnd_data=(output_data->fnd_data+1)%10000;
+
+         return;
+    }
+
+    for(i=0;i<9;i++)
+    {
+        if(switchkey[i])
+        {
+            prev_input=text_input;
+            text_input=i+1;switchkey[i]=0;
+            input_check=1;
+            output_data->fnd_data=(output_data->fnd_data+1)%10000;
+
+            break;
+        }
+    }
+
+    switchkey[i]=0;
+
+    if(input_check)
+    {
+        if(!text_mode)
+        {
+            if(text_input==prev_input)
+            {
+                same_cnt=(same_cnt+1)%3;
+                output_data->text_data[text_cnt-1]=text_board[i][same_cnt];
+            }
+            else if(prev_input!=text_input)
+            {
+                same_cnt=0;
+                if(text_cnt<32)
+                    output_data->text_data[text_cnt++]=text_board[i][same_cnt];
+                else if(text_cnt==32)
+                {
+                    for(i=1;i<32;i++)
+                        output_data->text_data[i-1]=output_data->text_data[i];
+                    output_data->text_data[text_cnt-1]=text_board[i][same_cnt];
+                }
+            }
+        }
+        else if(text_mode==1)
+        {
+            same_cnt=0;
+            if(text_cnt<32)
+                output_data->text_data[text_cnt++]=(i+1)+48;
+            else if(text_cnt==32)
+            {
+                for(i=1;i<32;i++)
+                    output_data->text_data[i-1]=output_data->text_data[i];
+                output_data->text_data[text_cnt-1]=(i+1)+48;
+            }
+        }
+    }
 }

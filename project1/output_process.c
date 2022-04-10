@@ -32,9 +32,12 @@ void output_process(int shm_output)
             case 1:
             device_fnd(data_out->fnd_data);
             device_led(data_out->led);
+            break;
             case 2:
             device_fnd(data_out->fnd_data);
-            device_led(data_out->led);
+            device_lcd(data_out->text_data);
+            device_dot(data_out->display_dot);
+            break;
             case 3:
             device_fnd(data_out->fnd_data);
             break;
@@ -118,4 +121,35 @@ void device_led(unsigned char led)
 
     usleep(1000);
 	return ;
+}
+
+void device_dot(unsigned char data[10])
+{
+    int fd;
+    char* input_name="/dev/fpga_dot";
+    fd=open(input_name, O_WRONLY);
+    if(fd<0)
+    {
+        printf("Device open error : %s\n",input_name);
+        exit(1);
+    }
+
+    write(fd,data,10);
+    close(fd);
+}
+
+void device_lcd (unsigned char data[32])
+{
+    int fd,i;
+    unsigned char str[32];
+    char *input_name="/dev/fpga_text_lcd";
+    fd=open(input_name,O_WRONLY);
+    if(fd<0)
+    {
+        printf("Device open error : %s\n",input_name);
+        exit(1);
+    }
+
+    write(fd,data,32);
+    close(fd);
 }
