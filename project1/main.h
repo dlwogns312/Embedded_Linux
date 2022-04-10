@@ -64,6 +64,6 @@ void digit_update(SHM_OUTPUT* output_datat,int digit);
 void convert_base(SHM_OUTPUT* output_data);
 
 //Mode 3 - Text editor
-void test_editor_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
+void text_editor_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
 
 #endif

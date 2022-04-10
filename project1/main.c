@@ -13,7 +13,7 @@ static int add_for_clock=0,clock_temp=0;
 static int which_switch;
 
 //value for text editor
-static int text_cnt,text_input,same_cnt;
+static int text_input,same_cnt;
 static int text_mode;
 char* text_board[9]={
     ".QZ","ABC","DEF",
@@ -39,7 +39,7 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
     {
         case 0:clock_mode=0;clock_temp=0;add_for_clock=0;which_switch=0;output_data->led=128;output_data->fnd_data=board_time();break;
         case 1:counter_mode=0;counter_num=0;output_data->fnd_data=0;output_data->led=64;break;
-        case 2:output_data->led=128;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;text_cnt=0;break;
+        case 2:output_data->led=0;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;break;
         case 3:output_data->led=128;break;
     }
     output_data->mode=now_mode;
@@ -362,8 +362,8 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         switchkey[1]=0;
         switchkey[2]=0;
 
-        memset(output_data->text_data,' ',32);
-        text_cnt=0;text_input=0;
+        memset(output_data->text_data,0,32);
+        text_input=0;
 
         output_data->fnd_data=(output_data->fnd_data+1)%10000;
         return;
@@ -374,9 +374,15 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         switchkey[4]=0;switchkey[5]=0;
 
         if(!text_mode)
+        {
+            printf("Change into Alphabet mode!\n");
             memcpy(output_data->display_dot,display_alphabet,10);
+        }
         else
+        {
+            printf("Change into Number mode!\n");
             memcpy(output_data->display_dot,display_number,10);
+        }
         text_input=0;
         output_data->fnd_data=(output_data->fnd_data+1)%10000;
 
@@ -389,14 +395,10 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
         same_cnt=0;
         text_input=0;
 
-        if(text_cnt<32)
-            output_data->text_data[text_cnt++]=' ';
-        else if(text_cnt==32)
-        {
-            for(i=1;i<32;i++)
-                output_data->text_data[i-1]=output_data->text_data[i];
-            output_data->text_data[text_cnt-1]=' ';
-        }
+        for(i=1;i<32;i++)
+            output_data->text_data[i-1]=output_data->text_data[i];
+        output_data->text_data[31]=' ';
+        
         output_data->fnd_data=(output_data->fnd_data+1)%10000;
 
          return;
@@ -424,32 +426,24 @@ void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)
             if(text_input==prev_input)
             {
                 same_cnt=(same_cnt+1)%3;
-                output_data->text_data[text_cnt-1]=text_board[i][same_cnt];
+                output_data->text_data[31]=text_board[i][same_cnt];
             }
             else if(prev_input!=text_input)
             {
                 same_cnt=0;
-                if(text_cnt<32)
-                    output_data->text_data[text_cnt++]=text_board[i][same_cnt];
-                else if(text_cnt==32)
-                {
-                    for(i=1;i<32;i++)
-                        output_data->text_data[i-1]=output_data->text_data[i];
-                    output_data->text_data[text_cnt-1]=text_board[i][same_cnt];
-                }
+                for(i=1;i<32;i++)
+                    output_data->text_data[i-1]=output_data->text_data[i];
+                output_data->text_data[31]=text_board[i][same_cnt];
+                
             }
         }
         else if(text_mode==1)
         {
             same_cnt=0;
-            if(text_cnt<32)
-                output_data->text_data[text_cnt++]=(i+1)+48;
-            else if(text_cnt==32)
-            {
-                for(i=1;i<32;i++)
-                    output_data->text_data[i-1]=output_data->text_data[i];
-                output_data->text_data[text_cnt-1]=(i+1)+48;
-            }
+            for(i=1;i<32;i++)
+                output_data->text_data[i-1]=output_data->text_data[i];
+            output_data->text_data[31]=(i+1)+48;
+            
         }
     }
 }

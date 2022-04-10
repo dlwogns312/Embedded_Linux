@@ -53,11 +53,6 @@ void output_process(int shm_output)
     return;
 }
 
-void device_lcd (unsigned char * data)
-{
-
-}
-
 void device_fnd(int fnd_data)
 {
     unsigned char save[4];
