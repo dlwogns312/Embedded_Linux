@@ -8,7 +8,7 @@ CFLAGS= -static #-W
 TARGET = test
 OBJDIR = build/
 
-_OBJS = input_process.o output_process.o main.o
+_OBJS = input_process.o output_process.o main.o main_process.o
 OBJS = $(addprefix $(OBJDIR), $(_OBJS))
 
 $(OBJDIR)$(TARGET): $(OBJS)

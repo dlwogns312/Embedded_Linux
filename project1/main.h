@@ -8,6 +8,7 @@
 #include <sys/ipc.h>
 #include <sys/types.h>
 #include <sys/shm.h>
+#include <sys/sem.h>
 
 #include <time.h>
 #include <string.h>
@@ -49,24 +50,11 @@ typedef struct _shm_data_output {
     int check_terminate;
 } SHM_OUTPUT;
 
-void main_process(int shm_input, int shm_output);
-
-//get board time
-int board_time();
-
-//Mode 1 - Clock
-void clock_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
-
-
-//Mode 2 - Counter
-void counter_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
-void digit_update(SHM_OUTPUT* output_datat,int digit);
-void convert_base(SHM_OUTPUT* output_data);
-
-//Mode 3 - Text editor
-void text_editor_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
-
-//Mode 4 - Draw Board
-void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey);
+union semun {
+    int  val;    /* Value for SETVAL */
+    struct semid_ds *buf;    /* Buffer for IPC_STAT, IPC_SET */
+    unsigned short  *array;  /* Array for GETALL, SETALL */
+    struct seminfo  *__buf;  /* Buffer for IPC_INFO (Linux-specific) */                                        
+};
 
 #endif
