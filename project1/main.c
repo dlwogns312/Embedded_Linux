@@ -26,7 +26,7 @@ int main(void)
 
     int i;
     union semun op;
-    op.val=0;
+    op.val=1;
 
     //initilize semaphore
     for(i=0;i<SEMA_MAX;i++)
