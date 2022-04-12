@@ -183,11 +183,11 @@ void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)
     if(clock_mode)
     {
         which_switch++;
-        if(which_switch>=20)
+        if(which_switch>=10)
         {
             which_switch=0;
         }
-        if(which_switch/10)
+        if(which_switch<5)
             output_data->led=16;
         else
             output_data->led=32;
@@ -411,7 +411,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
     int select=0;
     int ret;
 
-    blink=(blink+1)%20;
+    blink=(blink+1)%10;
     if(switchkey[0]==1)
     {
         switchkey[0]=0;
@@ -484,7 +484,7 @@ void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)
 
     output_data->display_dot[now_i]|=(1<<now_j);
 
-    if(blink/10||cursor_mode)
+    if(blink<5||cursor_mode)
         output_data->display_dot[now_i]-=(1<<now_j);
 
     int i;
