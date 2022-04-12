@@ -30,13 +30,16 @@ void input_process(int shm_input)
 
     while(!check_terminate)
     {
+
         if(shm_temp->check_terminate)
             check_terminate=1;
 
+        semop(sem_id,&p[0],1);
         //input for readkey and switchkey
         operating_readkey(readkey,shm_temp);
         operating_switchkey(switchkey,shm_temp);
-        
+        semop(sem_id,&v[0],1);
+
         usleep(100000);
     }
 

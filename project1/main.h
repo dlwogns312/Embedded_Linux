@@ -13,9 +13,6 @@
 #include <time.h>
 #include <string.h>
 
-//Set key for semaphore
-#define SEMA_KEY (key_t) 0x47
-
 //Keys for shared memory
 #define KEY_INPUT (key_t) 0x40
 #define KEY_OUTPUT (key_t) 0x50
@@ -30,6 +27,9 @@
 #define READKEY_VOLUME_UP 115
 #define READKEY_VOLUME_DOWN 114
 
+//Define for semaphore
+#define SEMA_MAX 2
+#define SEMA_KEY  (key_t)0x47
 
 //Define for mode
 #define MODE_UP 0x10
@@ -50,11 +50,15 @@ typedef struct _shm_data_output {
     int check_terminate;
 } SHM_OUTPUT;
 
+//semaphore structure
 union semun {
     int  val;    /* Value for SETVAL */
     struct semid_ds *buf;    /* Buffer for IPC_STAT, IPC_SET */
     unsigned short  *array;  /* Array for GETALL, SETALL */
     struct seminfo  *__buf;  /* Buffer for IPC_INFO (Linux-specific) */                                        
 };
+
+int sem_id;
+struct sembuf p[SEMA_MAX],v[SEMA_MAX];
 
 #endif

@@ -23,12 +23,13 @@ void output_process(int shm_output)
 
         now_mode=data_out->mode;
 
-        
+        semop(sem_id,&p[1],1);
         device_fnd(data_out->fnd_data);
         device_led(data_out->led);
         device_lcd(data_out->text_data);
         device_dot(data_out->display_dot);
-
+        semop(sem_id,&v[1],1);
+        
         usleep(100000);
     }
     shmdt((char*)data_out);

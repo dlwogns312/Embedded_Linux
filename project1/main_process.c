@@ -91,7 +91,8 @@ void main_process(int shm_input, int shm_output)
 
     while(!check_terminate)
     {
-
+        semop(sem_id,&p[0],1);
+        semop(sem_id,&p[1],1);
         readkey_prev=readkey_input;
         readkey_input=input_data->readkey;
        
@@ -111,9 +112,7 @@ void main_process(int shm_input, int shm_output)
                 default: break;
                 
             }
-        }
-       
-        usleep(100000);
+        }  
 
         //Operation separated by current mode
         switch(now_mode)
@@ -131,7 +130,9 @@ void main_process(int shm_input, int shm_output)
             break;
             default: break;
         }
-
+        semop(sem_id,&v[1],1);
+        semop(sem_id,&v[0],1);
+        usleep(100000);
     }
 
     shmdt((char*)input_data);
