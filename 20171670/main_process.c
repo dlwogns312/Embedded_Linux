@@ -61,7 +61,6 @@ void update_mode(SHM_OUTPUT* output_data,int readkey_input)
         case 2:output_data->led=0;same_cnt=0;text_input=0;text_mode=0; output_data->fnd_data=0;memcpy(output_data->display_dot,fpga_number[10],10);break;
         case 3:blink=0;now_i=0;now_j=6;output_data->led=0;display_mode=0;output_data->fnd_data=0;memset(dot_info,0,10);break;
     }
-    output_data->mode=now_mode;
     printf("Changed to Mode %s!\n",mode_print[now_mode]);
 }
 
@@ -85,7 +84,6 @@ void main_process(int shm_input, int shm_output)
     output_data->check_terminate=0;
     output_data->fnd_data=board_time();
     output_data->led=128;
-    output_data->mode=now_mode;
     memset(output_data->text_data,0,32);
    //output_data->fnd_data=get_cur_time();
 

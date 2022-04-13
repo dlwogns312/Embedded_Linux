@@ -31,11 +31,6 @@
 #define SEMA_MAX 2
 #define SEMA_KEY  (key_t)0x47
 
-//Define for mode
-#define MODE_UP 0x10
-#define MODE_DOWN 0x20
-#define INIT_MODE 1
-
 typedef struct _shm_data_input {
     int readkey;
     int check_terminate;
@@ -43,7 +38,7 @@ typedef struct _shm_data_input {
 } SHM_INPUT;
 
 typedef struct _shm_data_output {
-    int fnd_data,mode;
+    int fnd_data;
     unsigned char display_dot[10];
     unsigned char led;
     char text_data[32];

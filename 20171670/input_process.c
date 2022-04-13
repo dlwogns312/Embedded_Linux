@@ -43,6 +43,7 @@ void input_process(int shm_input)
         usleep(100000);
     }
 
+    //detach the shared memory
     shmdt((char *)shm_temp);
     close(readkey);close(switchkey);
 

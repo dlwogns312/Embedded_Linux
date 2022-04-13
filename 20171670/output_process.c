@@ -5,7 +5,6 @@ void output_process(int shm_output)
     printf("Output_process successfully Loaded!\n");
 
     int check_terminate=0;
-    int now_mode;
     
     SHM_OUTPUT* data_out=(SHM_OUTPUT*)shmat(shm_output,(char*)NULL,0);
 
@@ -16,12 +15,8 @@ void output_process(int shm_output)
         //printf("output\n");
         if(data_out->check_terminate)
         {
-            data_out->fnd_data=0;
-            data_out->led=0;
             check_terminate=1;
         }
-
-        now_mode=data_out->mode;
 
         semop(sem_id,&p[1],1);
         device_fnd(data_out->fnd_data);

@@ -90,5 +90,5 @@ int main(void)
         printf("deallocate semaphore!\n");
         semctl(sem_id,0,IPC_RMID,0);
     }
-    return;
+    return 0;
 }
