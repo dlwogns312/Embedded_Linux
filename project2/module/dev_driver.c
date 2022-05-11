@@ -37,19 +37,20 @@ struct group_data mydata;
 
 
 //file_operations structure
-static struct file_operations fops={
-    .owner=THIS_MODULE,
-    .open=dev_driver_open,
-    .release=dev_driver_release,
-    .unlocked_ioctl=dev_driver_ioctl,
+struct file_operations fops={
+    owner : THIS_MODULE,
+    open : dev_driver_open,
+    release : dev_driver_release,
+    unlocked_ioctl : dev_driver_ioctl,
 };
 
 //when dev_driver open, call this function
 int dev_driver_open(struct inode *minode, struct file *mfile)
 {
-    printk("dev_driver_open\n");
     if(dev_port_usage!=0)
         return -EBUSY;
+    printk(KERN_ALERT"dev_driver_open\n");
+    
     dev_port_usage=1;
 
     return 0;
@@ -163,7 +164,7 @@ static void kernel_timer_blink(unsigned long timeout) {
 int dev_driver_release(struct inode *minode,struct file *mfile)
 {
     dev_port_usage=0;
-    printk("dev_driver_release\n");
+    printk(KERN_ALERT"dev_driver_release\n");
 
     return 0;
 }

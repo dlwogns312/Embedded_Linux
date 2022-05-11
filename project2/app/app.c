@@ -19,12 +19,13 @@ int main (int argc, char* argv[])
     send_data.timer_cnt=atoi(argv[2]);
 
     int fd;
-    fd=open(DEVICE_NAME,O_RDWR);
+    fd=open(DEVICE_NAME,O_WRONLY);
     if(fd<0)
     {
         printf("%s Open Error\n",DEVICE_NAME);
         return -1;
     }
+    printf("Timer_interval: %d Timer_cnt : %d Tmer_init: %s\n",send_data.time_interval,send_data.timer_cnt,send_data.timer_init);
     ioctl(fd,IOCTL_SET_MSG,&send_data);
 
     close(fd);

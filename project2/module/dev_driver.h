@@ -39,8 +39,8 @@ unsigned char fpga_number[10][10] = {
 
 //structure for data
 struct group_data{
-	unsigned char time_interval;
-	unsigned char timer_cnt;
+	unsigned short int time_interval;
+	unsigned short int timer_cnt;
 	unsigned char timer_init[4];
 };
 
