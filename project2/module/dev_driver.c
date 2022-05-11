@@ -6,10 +6,10 @@ static int student_id=8;
 
 //Global variable usage and device address
 static int dev_port_usage=0;
-static unsigned int *iom_led_addr;
-static unsigned int *iom_lcd_addr;
-static unsigned int *iom_fnd_addr;
-static unsigned int *iom_dot_addr;
+static unsigned char *iom_led_addr;
+static unsigned char *iom_lcd_addr;
+static unsigned char *iom_fnd_addr;
+static unsigned char *iom_dot_addr;
 
 static struct mylist{
     struct timer_list timer;
@@ -286,6 +286,7 @@ void __exit iom_timer_exit(void)
     iounmap(iom_lcd_addr);
 
     unregister_chrdev(DEVICE_MAJOR,DEVICE_NAME);
+    printk("Exit module\n");
 }
 
 module_init(iom_timer_init);
