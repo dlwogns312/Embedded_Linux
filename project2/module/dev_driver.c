@@ -258,10 +258,10 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
 }
 
 //init function
-int __init iom_timer_init(void)
+static int __init iom_timer_init(void)
 {
    int result;
-   printk("timer_dev_driver_init\n");
+  
 
    result=register_chrdev(DEVICE_MAJOR,DEVICE_NAME,&fops);
    if(result<0)
@@ -269,7 +269,7 @@ int __init iom_timer_init(void)
        printk(KERN_WARNING"error %d\n",result);
        return result;
    }
-
+    printk("timer_dev_driver_init\n");
    //init timer and ioremap devices
    init_timer(&(mytimer.timer));
    iom_led_addr=ioremap(LED_ADDRESS,0x1);
@@ -301,5 +301,6 @@ void __exit iom_timer_exit(void)
 
 module_init(iom_timer_init);
 module_exit(iom_timer_exit);
+
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("LEEJAEHOON");
