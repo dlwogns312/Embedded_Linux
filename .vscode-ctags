@@ -1,0 +1,137 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	//
+$(OBJDIR)	project1/Makefile	/^$(OBJDIR):$/;"	t
+$(OBJDIR)$(TARGET)	project1/Makefile	/^$(OBJDIR)$(TARGET): $(OBJS)$/;"	t
+$(OBJDIR)%.o	project1/Makefile	/^$(OBJDIR)%.o: %.c $(OBJDIR)$/;"	t
+BUFF_SIZE	project1/main.h	/^#define BUFF_SIZE /;"	d
+CC	project1/Makefile	/^CC=arm-none-linux-gnueabi-gcc$/;"	m
+CC	timer/Makefile	/^CC := arm-none-linux-gnueabi-gcc$/;"	m
+CFLAGS	project1/Makefile	/^CFLAGS= -static #-W$/;"	m
+DEPS	project1/Makefile	/^DEPS=main.h$/;"	m
+DEVICE_DRIVER_NAME	project1/device_driver_module.c	/^#define DEVICE_DRIVER_NAME /;"	d	file:
+FPGA_BASE_ADDRESS	project1/output_process.h	/^#define FPGA_BASE_ADDRESS /;"	d
+KDIR	Makefile	/^KDIR	:= \/work\/achroimx_kernel$/;"	m
+KDIR	timer/Makefile	/^KDIR    :=\/work\/achroimx_kernel$/;"	m
+KERNEL_TIMER_MAJOR	timer/kernel_timer.c	/^#define KERNEL_TIMER_MAJOR /;"	d	file:
+KERNEL_TIMER_MINOR	timer/kernel_timer.c	/^#define KERNEL_TIMER_MINOR /;"	d	file:
+KERNEL_TIMER_NAME	timer/kernel_timer.c	/^#define KERNEL_TIMER_NAME /;"	d	file:
+KEY_INPUT	project1/main.h	/^#define KEY_INPUT /;"	d
+KEY_OUTPUT	project1/main.h	/^#define KEY_OUTPUT /;"	d
+KEY_PRESS	project1/main.h	/^#define KEY_PRESS /;"	d
+KEY_RELEASE	project1/main.h	/^#define KEY_RELEASE /;"	d
+LED_ADDR	project1/output_process.h	/^#define LED_ADDR /;"	d
+MAX_BUTTON	project1/main.h	/^#define MAX_BUTTON /;"	d
+MAX_DIGIT	project1/output_process.h	/^#define MAX_DIGIT /;"	d
+OBJDIR	project1/Makefile	/^OBJDIR = build\/$/;"	m
+OBJS	project1/Makefile	/^OBJS = $(addprefix $(OBJDIR), $(_OBJS))$/;"	m
+PWD	Makefile	/^PWD	:= $(shell pwd)$/;"	m
+PWD	timer/Makefile	/^PWD := $(shell pwd)$/;"	m
+READKEY_BACK	project1/main.h	/^#define READKEY_BACK /;"	d
+READKEY_VOLUME_DOWN	project1/main.h	/^#define READKEY_VOLUME_DOWN /;"	d
+READKEY_VOLUME_UP	project1/main.h	/^#define READKEY_VOLUME_UP /;"	d
+SEMA_KEY	project1/main.h	/^#define SEMA_KEY /;"	d
+SEMA_MAX	project1/main.h	/^#define SEMA_MAX /;"	d
+SHM_INPUT	project1/main.h	/^} SHM_INPUT;$/;"	t	typeref:struct:_shm_data_input
+SHM_OUTPUT	project1/main.h	/^} SHM_OUTPUT;$/;"	t	typeref:struct:_shm_data_output
+TARGET	project1/Makefile	/^TARGET = test$/;"	m
+_OBJS	project1/Makefile	/^_OBJS = input_process.o output_process.o main.o main_process.o$/;"	m
+__INPUT_PROCESS__	project1/input_process.h	/^#define __INPUT_PROCESS__$/;"	d
+__MAIN_PROCESS__	project1/main_process.h	/^#define __MAIN_PROCESS__$/;"	d
+__MAIN__	project1/main.h	/^#define __MAIN__$/;"	d
+__OUTPUT_PROCESS__	project1/output_process.h	/^#define __OUTPUT_PROCESS__$/;"	d
+__TIMER_DEV_DRIVER__	project2/module/timer_dev_driver.h	/^#define __TIMER_DEV_DRIVER__$/;"	d
+__buf	project1/main.h	/^    struct seminfo  *__buf;  \/* Buffer for IPC_INFO (Linux-specific) *\/                       /;"	m	union:semun	typeref:struct:seminfo *
+_shm_data_input	project1/main.h	/^typedef struct _shm_data_input {$/;"	s
+_shm_data_output	project1/main.h	/^typedef struct _shm_data_output {$/;"	s
+add_for_clock	project1/main_process.c	/^static int add_for_clock=0;$/;"	v	typeref:typename:int	file:
+all	timer/Makefile	/^all: driver app$/;"	t
+app	timer/Makefile	/^app:$/;"	t
+array	project1/main.h	/^    unsigned short  *array;  \/* Array for GETALL, SETALL *\/$/;"	m	union:semun	typeref:typename:unsigned short *
+blink	project1/main_process.c	/^static int blink,now_i,now_j;$/;"	v	typeref:typename:int	file:
+board_cnt	project1/main_process.c	/^static int board_cnt,display_mode;$/;"	v	typeref:typename:int	file:
+board_time	project1/main_process.c	/^int board_time()$/;"	f	typeref:typename:int
+buf	project1/main.h	/^    struct semid_ds *buf;    \/* Buffer for IPC_STAT, IPC_SET *\/$/;"	m	union:semun	typeref:struct:semid_ds *
+buffer	timer/kernel_timer.c	/^static char* buffer=NULL;$/;"	v	typeref:typename:char *	file:
+check_terminate	project1/main.h	/^    int check_terminate;$/;"	m	struct:_shm_data_input	typeref:typename:int
+check_terminate	project1/main.h	/^    int check_terminate;$/;"	m	struct:_shm_data_output	typeref:typename:int
+clean	Makefile	/^clean:$/;"	t
+clean	project1/Makefile	/^clean:$/;"	t
+clean	timer/Makefile	/^clean : $/;"	t
+clock_mode	project1/main_process.c	/^static int clock_mode=0;$/;"	v	typeref:typename:int	file:
+clock_process	project1/main_process.c	/^void clock_process (SHM_OUTPUT* output_data, unsigned char* switchkey)$/;"	f	typeref:typename:void
+convert_base	project1/main_process.c	/^void convert_base(SHM_OUTPUT* output_data)$/;"	f	typeref:typename:void
+count	timer/kernel_timer.c	/^	int count;$/;"	m	struct:struct_mydata	typeref:typename:int	file:
+counter_mode	project1/main_process.c	/^static int counter_mode=0;$/;"	v	typeref:typename:int	file:
+counter_num	project1/main_process.c	/^int counter_num=0;$/;"	v	typeref:typename:int
+counter_process	project1/main_process.c	/^void counter_process (SHM_OUTPUT* output_data, unsigned char* switchkey)$/;"	f	typeref:typename:void
+cursor_mode	project1/main_process.c	/^static int cursor_mode=0;$/;"	v	typeref:typename:int	file:
+default	Makefile	/^default:$/;"	t
+device_dot	project1/output_process.c	/^void device_dot(unsigned char data[10])$/;"	f	typeref:typename:void
+device_driver_exit	project1/device_driver_module.c	/^void __exit device_driver_exit(void)$/;"	f	typeref:typename:void __exit
+device_driver_fops	project1/device_driver_module.c	/^static struct file_operations device_driver_fops =$/;"	v	typeref:struct:file_operations	file:
+device_driver_init	project1/device_driver_module.c	/^int __init device_driver_init(void)$/;"	f	typeref:typename:int __init
+device_fnd	project1/output_process.c	/^void device_fnd(int fnd_data)$/;"	f	typeref:typename:void
+device_lcd	project1/output_process.c	/^void device_lcd (unsigned char data[32])$/;"	f	typeref:typename:void
+device_led	project1/output_process.c	/^void device_led(unsigned char led)$/;"	f	typeref:typename:void
+digit_update	project1/main_process.c	/^void digit_update(SHM_OUTPUT *output_data,int digit)$/;"	f	typeref:typename:void
+display_dot	project1/main.h	/^    unsigned char display_dot[10];$/;"	m	struct:_shm_data_output	typeref:typename:unsigned char[10]
+display_mode	project1/main_process.c	/^static int board_cnt,display_mode;$/;"	v	typeref:typename:int	file:
+dot_info	project1/main_process.c	/^unsigned char dot_info[10];$/;"	v	typeref:typename:unsigned char[10]
+draw_board_process	project1/main_process.c	/^void draw_board_process(SHM_OUTPUT* output_data,unsigned char* switchkey)$/;"	f	typeref:typename:void
+driver	timer/Makefile	/^driver : $/;"	t
+fnd_data	project1/main.h	/^    int fnd_data;$/;"	m	struct:_shm_data_output	typeref:typename:int
+fpga_number	project1/main_process.c	/^unsigned char fpga_number[11][10] = {$/;"	v	typeref:typename:unsigned char[11][10]
+fpga_number	project2/module/timer_dev_driver.h	/^unsigned char fpga_number[10][10] = {$/;"	v	typeref:typename:unsigned char[10][10]
+input_process	project1/input_process.c	/^void input_process(int shm_input)$/;"	f	typeref:typename:void
+kernel_timer_blink	timer/kernel_timer.c	/^static void kernel_timer_blink(unsigned long timeout) {$/;"	f	typeref:typename:void	file:
+kernel_timer_exit	timer/kernel_timer.c	/^void __exit kernel_timer_exit(void)$/;"	f	typeref:typename:void __exit
+kernel_timer_fops	timer/kernel_timer.c	/^static struct file_operations kernel_timer_fops =$/;"	v	typeref:struct:file_operations	file:
+kernel_timer_init	timer/kernel_timer.c	/^int __init kernel_timer_init(void)$/;"	f	typeref:typename:int __init
+kernel_timer_open	timer/kernel_timer.c	/^int kernel_timer_open(struct inode *minode, struct file *mfile) {$/;"	f	typeref:typename:int
+kernel_timer_release	timer/kernel_timer.c	/^int kernel_timer_release(struct inode *minode, struct file *mfile) {$/;"	f	typeref:typename:int
+kernel_timer_usage	timer/kernel_timer.c	/^static int kernel_timer_usage = 0;$/;"	v	typeref:typename:int	file:
+kernel_timer_write	timer/kernel_timer.c	/^ssize_t kernel_timer_write(struct file *inode, const char *gdata, size_t length, loff_t *off_wha/;"	f	typeref:typename:ssize_t
+led	project1/main.h	/^    unsigned char led;$/;"	m	struct:_shm_data_output	typeref:typename:unsigned char
+main	project1/main.c	/^int main(void)$/;"	f	typeref:typename:int
+main	project1/test_app.c	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	timer/kernel_timer_test.c	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main_process	project1/main_process.c	/^void main_process(int shm_input, int shm_output)$/;"	f	typeref:typename:void
+major_number	project1/device_driver_module.c	/^int major_number;$/;"	v	typeref:typename:int
+max_dot	project1/main_process.c	/^#define max_dot /;"	d	file:
+mode_print	project1/main_process.c	/^char* mode_print[]={"CLOCK","COUNTER","TEXT_EDITOR","DRAW_BOARD"};$/;"	v	typeref:typename:char * []
+mydata	timer/kernel_timer.c	/^struct struct_mydata mydata;$/;"	v	typeref:struct:struct_mydata
+now_i	project1/main_process.c	/^static int blink,now_i,now_j;$/;"	v	typeref:typename:int	file:
+now_j	project1/main_process.c	/^static int blink,now_i,now_j;$/;"	v	typeref:typename:int	file:
+now_mode	project1/main_process.c	/^static int now_mode=0;$/;"	v	typeref:typename:int	file:
+number	project1/device_driver_module.c	/^long number = 0;$/;"	v	typeref:typename:long
+obj-m	Makefile	/^obj-m	:= hello_module.o$/;"	m
+obj-m	timer/Makefile	/^obj-m = kernel_timer.o $/;"	m
+operating_readkey	project1/input_process.c	/^void operating_readkey(int readkey,SHM_INPUT* shm_temp)$/;"	f	typeref:typename:void
+operating_switchkey	project1/input_process.c	/^void operating_switchkey(int switchkey, SHM_INPUT* shm_temp)$/;"	f	typeref:typename:void
+output_process	project1/output_process.c	/^void output_process(int shm_output)$/;"	f	typeref:typename:void
+p	project1/main.h	/^struct sembuf p[SEMA_MAX],v[SEMA_MAX];$/;"	v	typeref:struct:sembuf[]
+push	project1/Makefile	/^push:$/;"	t
+readkey	project1/main.h	/^    int readkey;$/;"	m	struct:_shm_data_input	typeref:typename:int
+same_cnt	project1/main_process.c	/^static int text_input,same_cnt;$/;"	v	typeref:typename:int	file:
+sem_id	project1/main.h	/^int sem_id;$/;"	v	typeref:typename:int
+semun	project1/main.h	/^union semun {$/;"	u
+struct_mydata	timer/kernel_timer.c	/^static struct struct_mydata {$/;"	s	file:
+switchkey	project1/main.h	/^    unsigned char switchkey[9];$/;"	m	struct:_shm_data_input	typeref:typename:unsigned char[9]
+test_device_driver_open	project1/device_driver_module.c	/^int test_device_driver_open(struct inode *minode, struct file *mfile) {$/;"	f	typeref:typename:int
+test_device_driver_release	project1/device_driver_module.c	/^int test_device_driver_release(struct inode *minode, struct file *mfile) {$/;"	f	typeref:typename:int
+test_device_driver_write	project1/device_driver_module.c	/^ssize_t test_device_driver_write(struct file *inode, const char *gdata, size_t length, loff_t *o/;"	f	typeref:typename:ssize_t
+text_board	project1/main_process.c	/^char* text_board[9]={$/;"	v	typeref:typename:char * [9]
+text_data	project1/main.h	/^    char text_data[32];$/;"	m	struct:_shm_data_output	typeref:typename:char[32]
+text_editor_process	project1/main_process.c	/^void text_editor_process(SHM_OUTPUT* output_data, unsigned char* switchkey)$/;"	f	typeref:typename:void
+text_input	project1/main_process.c	/^static int text_input,same_cnt;$/;"	v	typeref:typename:int	file:
+text_mode	project1/main_process.c	/^static int text_mode;$/;"	v	typeref:typename:int	file:
+timer	timer/kernel_timer.c	/^	struct timer_list timer;$/;"	m	struct:struct_mydata	typeref:struct:timer_list	file:
+update_mode	project1/main_process.c	/^void update_mode(SHM_OUTPUT* output_data,int readkey_input)$/;"	f	typeref:typename:void
+v	project1/main.h	/^struct sembuf p[SEMA_MAX],v[SEMA_MAX];$/;"	v	typeref:struct:sembuf[][]
+val	project1/main.h	/^    int  val;    \/* Value for SETVAL *\/$/;"	m	union:semun	typeref:typename:int
+which_switch	project1/main_process.c	/^static int which_switch;$/;"	v	typeref:typename:int	file:
