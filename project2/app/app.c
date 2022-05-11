@@ -28,6 +28,7 @@ int main (int argc, char* argv[])
     printf("Timer_interval: %d Timer_cnt : %d Tmer_init: %s\n",send_data.time_interval,send_data.timer_cnt,send_data.timer_init);
     ioctl(fd,IOCTL_SET_MSG,&send_data);
 
+    ioctl(fd,IOCTL_COMMAND);
     close(fd);
 
     return 0;

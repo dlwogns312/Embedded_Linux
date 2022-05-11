@@ -45,7 +45,8 @@ struct group_data{
 };
 
 //Set the message of the device driver
-#define IOCTL_SET_MSG _IOW(DEVICE_MAJOR,0,struct group_data);
+#define IOCTL_SET_MSG _IOW(DEVICE_MAJOR,0,struct group_data)
+#define IOCTL_COMMAND _IO(DEVICE_MAJOR,0)
 
 int dev_driver_release(struct inode *minode,struct file *mfile);
 int dev_driver_open(struct inode *minode, struct file *mfile);

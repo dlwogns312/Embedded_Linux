@@ -37,11 +37,11 @@ struct group_data mydata;
 
 
 //file_operations structure
-struct file_operations fops={
-    owner : THIS_MODULE,
-    open : dev_driver_open,
-    release : dev_driver_release,
-    unlocked_ioctl : dev_driver_ioctl,
+static struct file_operations fops={
+    .owner=THIS_MODULE,
+    .open=dev_driver_open,
+    .release=dev_driver_release,
+    .unlocked_ioctl=dev_driver_ioctl,
 };
 
 //when dev_driver open, call this function
@@ -214,37 +214,46 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
             return -EFAULT;
         }
 
-    
-    //initialize the variables
-    name_i=16;name_dir=1;num_i=0;num_dir=1;
-    cnt=mydata.timer_cnt-1;
-    memcpy(value,mydata.timer_init,4);
-
-    printk(KERN_INFO"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
-    //find the initial number of fnd
     int i;
-    for(i=0;4;i++)
-        if(value[i])
-        {
-            pos=i;
-            init_fnd=value[i];
-        }
+    //initialize the variables
+    switch(ioctl_num){
+        case IOCTL_SET_MSG:
+            name_i=16;name_dir=1;num_i=0;num_dir=1;
+            cnt=mydata.timer_cnt-1;
+            memcpy(value,mydata.timer_init,4);
 
-    time_interval=mydata.time_interval;
-    //initialize lcd
-    memset(text_lcd,' ',sizeof(text_lcd));
-    strcpy(text_lcd,"20171670");
-    strcpy(text_lcd+16,"LEEJAEHOON");
+            printk(KERN_INFO"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
+            //find the initial number of fnd
+            
+            for(i=0;4;i++)
+                if(value[i])
+                {
+                    pos=i;
+                    init_fnd=value[i];
+                }
 
-    display();
+            time_interval=mydata.time_interval;
+            //initialize lcd
+            memset(text_lcd,' ',sizeof(text_lcd));
+            strcpy(text_lcd,"20171670");
+            strcpy(text_lcd+16,"LEEJAEHOON");
 
+            display();
+            break;
+        case IOCTL_COMMAND :
+            printk(KERN_INFO"Sart the Timer!\n");
+            mytimer.timer.expires=get_jiffies_64()+(time_interval*HZ/10);
+            mytimer.timer.data=(unsigned long)&mydata;
+            mytimer.timer.function=kernel_timer_blink;
 
-    mytimer.timer.expires=get_jiffies_64()+(time_interval*HZ/10);
-    mytimer.timer.data=(unsigned long)&mydata;
-    mytimer.timer.function=kernel_timer_blink;
-
-    add_timer(&mytimer.timer);
-
+            add_timer(&mytimer.timer);
+            break;
+        default:
+            printk(KERN_WARNING"Command Error!\n");
+            return -1;
+            break;
+    }
+    
     return 0;
 }
 

@@ -11,6 +11,7 @@
 
 //Set the message of the device driver
 #define IOCTL_SET_MSG _IOW(DEVICE_MAJOR,0,struct group_data)
+#define IOCTL_COMMAND _IO(DEVICE_MAJOR,0)
 
 struct group_data{
 	unsigned short int time_interval;
