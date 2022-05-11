@@ -13,7 +13,7 @@
 #define IOCTL_SET_MSG _IOW(DEVICE_MAJOR,0,struct group_data)
 
 struct group_data{
-	unsigned short int time_interval;
-	unsigned short int timer_cnt;
+	unsigned char time_interval;
+	unsigned char timer_cnt;
 	unsigned char timer_init[4];
 };
