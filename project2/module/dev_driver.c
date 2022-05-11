@@ -11,7 +11,7 @@ static unsigned int *iom_lcd_addr;
 static unsigned int *iom_fnd_addr;
 static unsigned int *iom_dot_addr;
 
-static mylist{
+static struct mylist{
     struct timer_list timer;
     int count;
 };
@@ -30,7 +30,7 @@ unsigned short int name_dir=1;
 unsigned short int num_dir=1;
 unsigned short int name_i=16;
 unsigned short int num_i=0;
-unsigned char text_lcd[33];
+unsigned char text_lcd[32];
 
 struct mylist mytimer;
 struct group_data mydata;
@@ -66,6 +66,7 @@ static void kernel_timer_blink(unsigned long timeout) {
     {
         memset(text_lcd,' ',sizeof(text_lcd));
         memset(value,0,4);
+        display();
     }
     else
     {
@@ -147,15 +148,15 @@ static void kernel_timer_blink(unsigned long timeout) {
             }
         }
         
-        
-        mytimer.timer.expires = get_jiffies_64() + ( time_interval* HZ/10);
-	    mytimer.timer.data = (unsigned long)&mytimer;
+        display();
+        mytimer.timer.expires = get_jiffies_64() + (time_interval* HZ/10);
+	    mytimer.timer.data = (unsigned long)&p_data;
 	    mytimer.timer.function = kernel_timer_blink;
 
 	    add_timer(&mytimer.timer);
     }
 
-	return 0;
+	return ;
 }
 
 //when dev_driver close, call this function
@@ -189,7 +190,7 @@ void display(void)
     outw(_s_value,(unsigned int)iom_fnd_addr);	  
 
     //print lcd
-    for(i=0;i<=32;i++)
+    for(i=0;i<32;i++)
     {
         _s_value = (text_lcd[i] & 0xFF) << 8 | text_lcd[i + 1] & 0xFF;
 		outw(_s_value,(unsigned int)iom_lcd_addr+i);
@@ -200,7 +201,7 @@ void display(void)
 }
 
 //set ioctl operation for device driver
-static long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioctl_param)
+long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioctl_param)
 {
     //get data from user
     int ret;
@@ -214,10 +215,11 @@ static long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned l
 
     
     //initialize the variables
-    name_idx=16;name_dir=1;num_idx=0;num_dir=1;
+    name_i=16;name_dir=1;num_i=0;num_dir=1;
     cnt=mydata.timer_cnt-1;
     memcpy(value,mydata.timer_init,4);
 
+    printk(KERN_INFO"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
     //find the initial number of fnd
     int i;
     for(i=0;4;i++)
@@ -228,7 +230,7 @@ static long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned l
         }
 
     time_interval=mydata.time_interval;
-    //initialize lct
+    //initialize lcd
     memset(text_lcd,' ',sizeof(text_lcd));
     strcpy(text_lcd,"20171670");
     strcpy(text_lcd+16,"LEEJAEHOON");
@@ -251,7 +253,7 @@ int __init iom_timer_init(void)
    int result;
    printk("timer_dev_driver_init\n");
 
-   result=register_chrdev(DEVICE_MAJOR,DEVICE_NAME,$fops);
+   result=register_chrdev(DEVICE_MAJOR,DEVICE_NAME,&fops);
    if(result<0)
    {
        printk(KERN_WARNING"error %d\n",result);

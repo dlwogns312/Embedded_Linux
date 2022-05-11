@@ -10,7 +10,7 @@
 #define DEVICE_NAME "/dev/dev_driver"
 
 //Set the message of the device driver
-#define IOCTL_SET_MSG _IOW(DEVICE_MAJOR,0,struct group_data);
+#define IOCTL_SET_MSG _IOW(DEVICE_MAJOR,0,struct group_data)
 
 struct group_data{
 	unsigned short int time_interval;

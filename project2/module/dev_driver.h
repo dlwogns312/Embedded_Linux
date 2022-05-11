@@ -49,6 +49,7 @@ struct group_data{
 
 int dev_driver_release(struct inode *minode,struct file *mfile);
 int dev_driver_open(struct inode *minode, struct file *mfile);
+long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioctl_param);
 
 void display();
 
