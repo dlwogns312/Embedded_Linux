@@ -20,7 +20,11 @@ int main (int argc, char* argv[])
 
     int fd;
     fd=open(DEVICE_NAME,O_RDWR);
-
+    if(fd<0)
+    {
+        printf("%s Open Error\n",DEVICE_NAME);
+        return -1;
+    }
     ioctl(fd,IOCTL_SET_MSG,&send_data);
 
     close(fd);
