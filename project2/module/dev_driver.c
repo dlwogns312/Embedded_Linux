@@ -238,8 +238,8 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
             memset(text_lcd,' ',sizeof(text_lcd));
             for(i=0;i<student_id;i++)
                 text_lcd[i]=id[i];
-            for(i=16;i<name_length;i++)
-                text_lcd[i]=name[i];
+            for(i=16;i<16+name_length;i++)
+                text_lcd[i]=user_name[i];
 
             display();
             break;

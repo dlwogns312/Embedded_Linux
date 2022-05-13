@@ -19,7 +19,7 @@
 
 //unsigned char array for name and student id
 unsigned char id[8]="20171670";
-unsigned char name[10]="LEEJAEHOON";
+unsigned char user_name[10]="LEEJAEHOON";
 
 //physical address
 #define FND_ADDRESS 0x08000004 
