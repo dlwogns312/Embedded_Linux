@@ -30,7 +30,7 @@ unsigned short int name_dir=1;
 unsigned short int num_dir=1;
 unsigned short int name_i=16;
 unsigned short int num_i=0;
-unsigned char text_lcd[32];
+unsigned char text_lcd[33];
 
 struct mylist mytimer;
 struct group_data mydata;
