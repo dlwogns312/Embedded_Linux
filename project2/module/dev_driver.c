@@ -88,15 +88,15 @@ static void kernel_timer_blink(unsigned long timeout) {
             if(num_i+student_id<16)
             {
                 for(i=num_i+student_id;i>num_i;i--)
-                    value[i]=value[i-1];
-                value[num_i++]=' ';
+                    text_lcd[i]=text_lcd[i-1];
+                text_lcd[num_i++]=' ';
             }
             else
             {
                 for(i=num_i-1;i<student_id+num_i;i++)
-                    value[i]=value[i+1];
+                    text_lcd[i]=text_lcd[i+1];
                 num_dir=0;
-                value[(num_i--)+student_id-1]=' ';
+               text_lcd[(num_i--)+student_id-1]=' ';
             }
         }
         else
@@ -145,7 +145,7 @@ static void kernel_timer_blink(unsigned long timeout) {
                 for(i=name_i+name_length;i>name_i;i--)
                     text_lcd[i]=text_lcd[i-1];
                 name_dir=1;
-                text_lcd[name_i++]=' '
+                text_lcd[name_i++]=' ';
             }
         }
         
@@ -298,7 +298,7 @@ void __exit iom_timer_exit(void)
     iounmap(iom_dot_addr);
     iounmap(iom_lcd_addr);
 
-    del_timer_sync(&(mytimer.timer))
+    del_timer_sync(&(mytimer.timer));
     unregister_chrdev(DEVICE_MAJOR,DEVICE_NAME);
     printk("Exit module\n");
 }
