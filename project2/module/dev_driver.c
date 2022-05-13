@@ -104,15 +104,15 @@ static void kernel_timer_blink(unsigned long timeout) {
             if(num_i>0)
             {
                 for(i=num_i-1;i<student_id+num_i;i++)
-                    value[i]=value[i+1];
-                value[(num_i--)+student_id-1]=' ';
+                    text_lcd[i]=text_lcd[i+1];
+                text_lcd[(num_i--)+student_id-1]=' ';
             }
             else
             {
                 for(i=num_i+student_id;i>num_i;i--)
-                    value[i]=value[i-1];
+                    text_lcd[i]=text_lcd[i-1];
                 num_dir=1;
-                value[num_i++]=' ';
+                text_lcd[num_i++]=' ';
             }
         }
 
@@ -122,14 +122,14 @@ static void kernel_timer_blink(unsigned long timeout) {
             if(name_i+name_length<32)
             {
                 for(i=name_i+name_length;i>name_i;i--)
-                    value[i]=value[i-1];
-                value[name_i++]=' ';
+                    text_lcd[i]=text_lcd[i-1];
+                text_lcd[name_i++]=' ';
             }
             else{
                 for(i=name_i-1;i<name_i+name_length;i++)
-                    value[i]=value[i+1];
+                    text_lcd[i]=text_lcd[i+1];
                 name_dir=0;
-                value[(name_i--)+name_length-1]=' ';
+                text_lcd[(name_i--)+name_length-1]=' ';
             }
         }
         else
@@ -137,15 +137,15 @@ static void kernel_timer_blink(unsigned long timeout) {
             if(name_i>16)
             {
                 for(i=name_i-1;i<name_i+name_length;i++)
-                    value[i]=value[i+1];
-                value[(name_i--)+name_length+1]=' ';
+                    text_lcd[i]=text_lcd[i+1];
+                text_lcd[(name_i--)+name_length+1]=' ';
             }
             else
             {
                 for(i=name_i+name_length;i>name_i;i--)
-                    value[i]=value[i-1];
+                    text_lcd[i]=text_lcd[i-1];
                 name_dir=1;
-                value[name_i++]=' ';
+                text_lcd[name_i++]=' '
             }
         }
         
@@ -222,7 +222,7 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
             cnt=mydata.timer_cnt-1;
             memcpy(value,mydata.timer_init,4);
 
-            printk(KERN_ALERT"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
+            printk(KERN_ALERT"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,value);
             //find the initial number of fnd
             
             for(i=0;i<4;i++)
@@ -232,7 +232,7 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
                     init_fnd=value[i];
                     break;
                 }
-
+            
             time_interval=mydata.time_interval;
             //initialize lcd
             memset(text_lcd,' ',sizeof(text_lcd));
@@ -298,6 +298,7 @@ void __exit iom_timer_exit(void)
     iounmap(iom_dot_addr);
     iounmap(iom_lcd_addr);
 
+    del_timer_sync(&(mytimer.timer))
     unregister_chrdev(DEVICE_MAJOR,DEVICE_NAME);
     printk("Exit module\n");
 }
