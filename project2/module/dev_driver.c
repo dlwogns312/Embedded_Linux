@@ -205,12 +205,11 @@ void display(void)
 long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioctl_param)
 {
     
-    int i;
+    int i;int ret;
     //initialize the variables
     switch(ioctl_num){
-            case IOCTL_SET_MSG:
+        case IOCTL_SET_MSG:
             //get data from user
-            int ret;
             ret=copy_from_user(&mydata,(struct group_data*)ioctl_param,sizeof(struct group_data));
 
             if(ret)
@@ -223,26 +222,29 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
             cnt=mydata.timer_cnt-1;
             memcpy(value,mydata.timer_init,4);
 
-            printk(KERN_Warning"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
+            printk(KERN_ALERT"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
             //find the initial number of fnd
             
-            for(i=0;4;i++)
+            for(i=0;i<4;i++)
                 if(value[i])
                 {
                     pos=i;
                     init_fnd=value[i];
+                    break;
                 }
 
             time_interval=mydata.time_interval;
             //initialize lcd
             memset(text_lcd,' ',sizeof(text_lcd));
-            strcpy(text_lcd,"20171670");
-            strcpy(text_lcd+16,"LEEJAEHOON");
+            for(i=0;i<student_id;i++)
+                text_lcd[i]=id[i];
+            for(i=16;i<name_length;i++)
+                text_lcd[i]=name[i];
 
             display();
             break;
         case IOCTL_COMMAND :
-            printk(KERN_INFO"Sart the Timer!\n");
+            printk(KERN_INFO"Start the Timer!\n");
             mytimer.timer.expires=get_jiffies_64()+(time_interval*HZ/10);
             mytimer.timer.data=(unsigned long)&mydata;
             mytimer.timer.function=kernel_timer_blink;

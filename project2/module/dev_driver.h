@@ -17,6 +17,10 @@
 #define DEVICE_MAJOR 242
 #define DEVICE_NAME "dev_driver"
 
+//unsigned char array for name and student id
+unsigned char[8]="20171670";
+unsigned char[10]="LEEJAEHOON";
+
 //physical address
 #define FND_ADDRESS 0x08000004 
 #define LED_ADDRESS 0x08000016
