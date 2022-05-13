@@ -204,25 +204,26 @@ void display(void)
 //set ioctl operation for device driver
 long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioctl_param)
 {
-    //get data from user
-    int ret;
-    ret=copy_from_user(&mydata,(struct group_data*)ioctl_param,sizeof(struct group_data));
-
-    if(ret)
-        {
-            printk(KERN_ALERT "Error occured at copying from user!\n");
-            return -EFAULT;
-        }
-
+    
     int i;
     //initialize the variables
     switch(ioctl_num){
-        case IOCTL_SET_MSG:
+            case IOCTL_SET_MSG:
+            //get data from user
+            int ret;
+            ret=copy_from_user(&mydata,(struct group_data*)ioctl_param,sizeof(struct group_data));
+
+            if(ret)
+                {
+                    printk(KERN_ALERT "Error occured at copying from user!\n");
+                    return -EFAULT;
+                }
+
             name_i=16;name_dir=1;num_i=0;num_dir=1;
             cnt=mydata.timer_cnt-1;
             memcpy(value,mydata.timer_init,4);
 
-            printk(KERN_INFO"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
+            printk(KERN_Warning"Timer_interval : %d Timer_cnt :%d Timer_init : %s\n",mydata.time_interval,mydata.timer_cnt,mydata.timer_init);
             //find the initial number of fnd
             
             for(i=0;4;i++)
@@ -250,7 +251,7 @@ long dev_driver_ioctl(struct file *file,unsigned int ioctl_num,unsigned long ioc
             break;
         default:
             printk(KERN_WARNING"Command Error!\n");
-            return -1;
+            return -EFAULT;
             break;
     }
     

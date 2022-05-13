@@ -25,7 +25,7 @@ int main (int argc, char* argv[])
         printf("%s Open Error\n",DEVICE_NAME);
         return -1;
     }
-    printf("Timer_interval: %d Timer_cnt : %d Tmer_init: %s\n",send_data.time_interval,send_data.timer_cnt,send_data.timer_init);
+    
     ioctl(fd,IOCTL_SET_MSG,&send_data);
 
     ioctl(fd,IOCTL_COMMAND);
