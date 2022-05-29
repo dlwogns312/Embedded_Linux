@@ -1,4 +1,4 @@
-#include "stopwatch_driver.h"
+#include "stopwatch.h"
 
 //usage counter
 static int inter_usage=0;
@@ -10,6 +10,7 @@ static int inter_minor=0;
 static int start_set=0;
 static int exit_cnt=0;
 static int exit_set=0;
+static int result;
 
 static unsigned char min=0;
 static unsigned char sec=0;
@@ -76,7 +77,7 @@ static void timer_handler(unsigned long param)
 
     timer.expires=get_jiffies_64() + (HZ/100);
     timer.data=0;
-    timer.functioin=timer_handler;
+    timer.function=timer_handler;
     add_timer(&timer);  
 
     return 0;
@@ -92,7 +93,7 @@ irqreturn_t inter_home(int irq, void* dev_id, struct pt_regs* reg)
         init_timer(&timer);
         timer.expires=get_jiffies_64() + (HZ/100);
         timer.data=0;
-        timer.functioin=timer_handler;
+        timer.function=timer_handler;
         add_timer(&timer);
     }
 
@@ -144,25 +145,25 @@ static int inter_open(struct inode *minode, struct file *mfile)
     gpio_direction_input(IMX_GPIO_NR(1,11));
 	irq = gpio_to_irq(IMX_GPIO_NR(1,11));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-	ret=request_irq(irq, inter_handler1, IRQF_TRIGGER_FALLING, "home", 0);
+	ret=request_irq(irq, inter_home, IRQF_TRIGGER_FALLING, "home", 0);
 
 	// interrrupt back
 	gpio_direction_input(IMX_GPIO_NR(1,12));
 	irq = gpio_to_irq(IMX_GPIO_NR(1,12));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-	ret=request_irq(irq, inter_handler2, IRQF_TRIGGER_FALLING, "back", 0);
+	ret=request_irq(irq, inter_back, IRQF_TRIGGER_FALLING, "back", 0);
 
 	// interrupt volume up
 	gpio_direction_input(IMX_GPIO_NR(2,15));
 	irq = gpio_to_irq(IMX_GPIO_NR(2,15));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-	ret=request_irq(irq, inter_handler3, IRQF_TRIGGER_FALLING, "volup", 0);
+	ret=request_irq(irq, inter_volume_up, IRQF_TRIGGER_FALLING, "volup", 0);
 
 	// interrupt volume down
 	gpio_direction_input(IMX_GPIO_NR(5,14));
 	irq = gpio_to_irq(IMX_GPIO_NR(5,14));
 	printk(KERN_ALERT "IRQ Number : %d\n",irq);
-	ret=request_irq(irq, inter_handler4, IRQF_TRIGGER_FALLING|IRQF_TRIGGER_RISING, "voldown", 0);
+	ret=request_irq(irq, inter_volume_down, IRQF_TRIGGER_FALLING|IRQF_TRIGGER_RISING, "voldown", 0);
 
 	return 0;
 }
@@ -221,6 +222,8 @@ static int inter_register_cdev(void)
 
 void short_do_workqueue()
 {
+    printf("print fnd!\n");
+    
     unsigned short int _s_value;
     unsigned char value[4];
     value[0]=min/10;
@@ -243,19 +246,20 @@ static int __init inter_init(void)
 
     fnd_addr = ioremap (FND_ADDRESS, 0x4);
 
-    INIT_WORK(&short_wq,(typeof(short_wq.func))short_do_workqueue,NULL);
-	printk(KERN_ALERT "Init Module Success \n");
-	printk(KERN_ALERT "Device : /dev/stopwatch, Major Num : %d \n", inter_major);
-
     if (fnd_addr == NULL) 
     {
         printk (KERN_WARNING "ioremap for fnd error!\n");
         return -EFAULT;
     }
+    INIT_WORK(&short_wq,(typeof(short_wq.func))short_do_workqueue);
+	printk(KERN_ALERT "Init Module Success \n");
+	printk(KERN_ALERT "Device : /dev/stopwatch, Major Num : %d \n", inter_major);
+
+  
     return 0;
 }
 
-static void __eixt inter_exit(void)
+static void __exit inter_exit(void)
 {
     iounmap (fnd_addr);
     cdev_del(&inter_cdev);
