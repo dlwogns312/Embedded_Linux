@@ -57,7 +57,8 @@ static void timer_handler(unsigned long param)
 
     if(pause_set!=1)
     {
-        //update stopwatch after 1second
+        //update stopwatch after 1second 
+        cnt++;
         if(cnt==100)
         {
             cnt=0;
@@ -68,14 +69,10 @@ static void timer_handler(unsigned long param)
                 min=(min+1)%60;
             }
             schedule_work(&short_wq);
-        }
-        else
-        {
-            cnt++;
-        }
+        } 
     }
 
-    timer.expires=get_jiffies_64() + (HZ/1000);
+    timer.expires=get_jiffies_64() + (HZ/100);
     timer.data=0;
     timer.function=timer_handler;
     add_timer(&timer);  
@@ -91,7 +88,7 @@ irqreturn_t inter_home(int irq, void* dev_id, struct pt_regs* reg)
     {
         start_set=1;
         init_timer(&timer);
-        timer.expires=get_jiffies_64() + (HZ/1000);
+        timer.expires=get_jiffies_64() + (HZ/100);
         timer.data=0;
         timer.function=timer_handler;
         add_timer(&timer);
