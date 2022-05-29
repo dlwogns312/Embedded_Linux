@@ -54,10 +54,10 @@ irqreturn_t inter_handler3(int irq, void* dev_id,struct pt_regs* reg) {
         printk(KERN_ALERT "interrupt3!!! = %x\n", gpio_get_value(IMX_GPIO_NR(2, 15)));
 		
 		if(++interruptCount>=5) {
-		interruptCount=0;
+			interruptCount=0;
                 __wake_up(&wq_write, 1, 1, NULL);
-		//wake_up_interruptible(&wq_write);
-		printk("wake up\n");
+			//wake_up_interruptible(&wq_write);
+			printk("wake up\n");
         }
 
         return IRQ_HANDLED;
