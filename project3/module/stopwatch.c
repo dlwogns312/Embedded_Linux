@@ -75,7 +75,7 @@ static void timer_handler(unsigned long param)
         }
     }
 
-    timer.expires=get_jiffies_64() + (HZ/100);
+    timer.expires=get_jiffies_64() + (HZ/1000);
     timer.data=0;
     timer.function=timer_handler;
     add_timer(&timer);  
@@ -89,9 +89,9 @@ irqreturn_t inter_home(int irq, void* dev_id, struct pt_regs* reg)
 
     if(!start_set)
     {
-        start_set=0;
+        start_set=1;
         init_timer(&timer);
-        timer.expires=get_jiffies_64() + (HZ/100);
+        timer.expires=get_jiffies_64() + (HZ/1000);
         timer.data=0;
         timer.function=timer_handler;
         add_timer(&timer);
@@ -222,14 +222,14 @@ static int inter_register_cdev(void)
 
 void short_do_workqueue()
 {
-    printf("print fnd!\n");
-    
+    //printk("print fnd! %d %d\n",min,sec);
+
     unsigned short int _s_value;
     unsigned char value[4];
     value[0]=min/10;
     value[1]=min%10;
-    value[3]=sec/10;
-    value[4]=sec%10;
+    value[2]=sec/10;
+    value[3]=sec%10;
 
     //FND out
     _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
