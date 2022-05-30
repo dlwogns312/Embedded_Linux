@@ -301,10 +301,10 @@ static int __init inter_init(void)
         return -EFAULT;
     }
     //initialize the work queue
-    INIT_WORK(&wq_home,(typeof(do_home.func))do_home);
-    INIT_WORK(&wq_back,(typeof(do_back.func))do_back);
-    INIT_WORK(&wq_up,(typeof(do_up.func))do_up);
-    INIT_WORK(&wq_down,(typeof(do_down.func))do_down);
+    INIT_WORK(&wq_home,(typeof(wq_home.func))do_home);
+    INIT_WORK(&wq_back,(typeof(wq_back.func))do_back);
+    INIT_WORK(&wq_up,(typeof(wq_up.func))do_up);
+    INIT_WORK(&wq_down,(typeof(wq_down.func))do_down);
 
 	printk(KERN_ALERT "Init Module Success \n");
 	printk(KERN_ALERT "Device : /dev/stopwatch, Major Num : %d \n", inter_major);
