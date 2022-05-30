@@ -145,6 +145,23 @@ irqreturn_t inter_volume_down(int irq, void* dev_id, struct pt_regs* reg)
    return IRQ_HANDLED;
 } 
 
+
+void exec_wq()
+{
+    unsigned short int _s_value;
+    unsigned char value[4];
+    value[0]=min/10;
+    value[1]=min%10;
+    value[2]=sec/10;
+    value[3]=sec%10;
+
+    //FND out
+     _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
+    outw(_s_value,(unsigned int)fnd_addr);
+    
+    return;
+}
+
 static int inter_open(struct inode *minode, struct file *mfile)
 {
     int ret,irq;
@@ -241,22 +258,6 @@ static int inter_register_cdev(void)
 		printk(KERN_NOTICE "inter Register Error %d\n", error);
 	}
 	return 0;
-}
-
-void exec_wq()
-{
-    unsigned short int _s_value;
-    unsigned char value[4];
-    value[0]=min/10;
-    value[1]=min%10;
-    value[2]=sec/10;
-    value[3]=sec%10;
-
-    //FND out
-     _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
-    outw(_s_value,(unsigned int)fnd_addr);
-    
-    return;
 }
 
 static int __init inter_init(void)
