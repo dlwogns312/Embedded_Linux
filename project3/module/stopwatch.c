@@ -20,14 +20,19 @@ static int cnt=0;
 //Timer variable
 struct timer_list timer;
 
+//variable for work queue
+static struct work_struct wq_home;
+static struct work_struct wq_back;
+static struct work_struct wq_up;
+static struct work_struct wq_down;
+
 // address of fpga fnd
 static unsigned char* fnd_addr;
 
 static dev_t inter_dev;
 static struct cdev inter_cdev;
 
-static struct work_struct short_wq;
-
+//variable for wait queue
 wait_queue_head_t wq_write;
 DECLARE_WAIT_QUEUE_HEAD(wq_write);
 
@@ -68,7 +73,16 @@ static void timer_handler(unsigned long param)
                 sec=0;
                 min=(min+1)%60;
             }
-            schedule_work(&short_wq);
+            unsigned short int _s_value;
+            unsigned char value[4];
+            value[0]=min/10;
+            value[1]=min%10;
+            value[2]=sec/10;
+            value[3]=sec%10;
+
+            //FND out
+            _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
+            outw(_s_value,(unsigned int)fnd_addr);
         } 
     }
 
@@ -94,7 +108,7 @@ irqreturn_t inter_home(int irq, void* dev_id, struct pt_regs* reg)
         add_timer(&timer);
     }
 
-    pause_set=0;
+    schedule_work(&wq_home);
     return IRQ_HANDLED;
 
 }
@@ -103,7 +117,7 @@ irqreturn_t inter_back(int irq, void* dev_id, struct pt_regs* reg)
 {
     printk(KERN_ALERT"Pause Stopwatch!\n");
 
-    pause_set=1;
+    schedule_work(&wq_back);
 
     return IRQ_HANDLED;
 }
@@ -112,17 +126,15 @@ irqreturn_t inter_volume_up(int irq, void* dev_id, struct pt_regs* reg)
 {
     printk(KERN_ALERT"Reset Stopwatch!\n");
 
-    min=0;sec=0;cnt=0;
-    schedule_work(&short_wq);
+    schedule_work(&wq_up);
 
     return IRQ_HANDLED;
 }
 
 irqreturn_t inter_volume_down(int irq, void* dev_id, struct pt_regs* reg)
 {
-   exit_set=1-exit_set;
-   exit_cnt=0;
-
+   printk(KERN_ALERT"Try to turn stopwatch off!\n");
+   schedule_work(&wq_down);
    return IRQ_HANDLED;
 } 
 
@@ -135,8 +147,18 @@ static int inter_open(struct inode *minode, struct file *mfile)
         return -EBUSY;
     
     inter_usage=1;
+
     min=0;sec=0;cnt=0;
-    schedule_work(&short_wq);
+    unsigned short int _s_value;
+    unsigned char value[4];
+    value[0]=min/10;
+    value[1]=min%10;
+    value[2]=sec/10;
+    value[3]=sec%10;
+
+    //FND out
+    _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
+    outw(_s_value,(unsigned int)fnd_addr);
 
     //interrupt home
     gpio_direction_input(IMX_GPIO_NR(1,11));
@@ -170,7 +192,17 @@ static int inter_release(struct inode *minode, struct file *mfile){
     inter_usage=0;
     start_set=0;
     min=0;sec=0;cnt=0;
-    schedule_work(&short_wq);
+
+    unsigned short int _s_value;
+    unsigned char value[4];
+    value[0]=min/10;
+    value[1]=min%10;
+    value[2]=sec/10;
+    value[3]=sec%10;
+
+    //FND out
+    _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
+    outw(_s_value,(unsigned int)fnd_addr);
     
     free_irq(gpio_to_irq(IMX_GPIO_NR(1, 11)), NULL);
 	free_irq(gpio_to_irq(IMX_GPIO_NR(1, 12)), NULL);
@@ -217,9 +249,21 @@ static int inter_register_cdev(void)
 	return 0;
 }
 
-void short_do_workqueue()
+void do_home()
 {
-    //printk("print fnd! %d %d\n",min,sec);
+    pause_set=0;
+    return;
+}
+
+void do_back()
+{
+    pause_set=1;
+    return;
+}
+
+void do_up()
+{
+    cnt=0; min=0; sec=0;
 
     unsigned short int _s_value;
     unsigned char value[4];
@@ -229,8 +273,16 @@ void short_do_workqueue()
     value[3]=sec%10;
 
     //FND out
-    _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
+     _s_value = value[0] << 12 | value[1] << 8 |value[2] << 4 |value[3];
     outw(_s_value,(unsigned int)fnd_addr);
+    
+    return;
+}
+
+void do_down()
+{
+    exit_set=1-exit_set;
+    exit_cnt=0;
 
     return;
 }
@@ -248,7 +300,12 @@ static int __init inter_init(void)
         printk (KERN_WARNING "ioremap for fnd error!\n");
         return -EFAULT;
     }
-    INIT_WORK(&short_wq,(typeof(short_wq.func))short_do_workqueue);
+    //initialize the work queue
+    INIT_WORK(&wq_home,(typeof(do_home.func))do_home);
+    INIT_WORK(&wq_back,(typeof(do_back.func))do_back);
+    INIT_WORK(&wq_up,(typeof(do_up.func))do_up);
+    INIT_WORK(&wq_down,(typeof(do_down.func))do_down);
+
 	printk(KERN_ALERT "Init Module Success \n");
 	printk(KERN_ALERT "Device : /dev/stopwatch, Major Num : %d \n", inter_major);
 

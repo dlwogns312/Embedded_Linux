@@ -7,7 +7,6 @@ int main(int argc, char* argv[])
     
     fd=open(SW_NAME,O_RDWR);
 
-    //for sleep
     write(fd,buf,2);
 
     close(fd);
