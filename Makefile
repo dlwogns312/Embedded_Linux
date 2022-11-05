@@ -1,13 +1,15 @@
-obj-m	:= hello_module.o
+obj-m := dev_lib.o
 
-KDIR	:= /work/achroimx_kernel
-PWD	:= $(shell pwd)
+KDIR := /work/achroimx_kernel/
+PWD := $(shell pwd)
 
-default:
+default :
 	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+
 clean:
-	rm -rf *.o
-	rm -rf *.ko
-	rm -rf *.mod.c
-	rm -rf *.order
-	rm -rf *.symvers
+	rm -f *.ko
+	rm -f *.o
+	rm -f *.mod.*
+	rm -f *.cmd
+	rm -f *.symvers
+	rm -f *.order
